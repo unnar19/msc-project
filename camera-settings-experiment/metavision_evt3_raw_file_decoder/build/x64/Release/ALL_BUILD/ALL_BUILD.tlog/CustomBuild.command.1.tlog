@@ -1,0 +1,10 @@
+^C:\USERS\UNNAR\DESKTOP\MSC_VERKEFNI\CAMERA-SETTINGS-EXPERIMENT\METAVISION_EVT3_RAW_FILE_DECODER\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/unnar/Desktop/msc_verkefni/camera-settings-experiment/metavision_evt3_raw_file_decoder -BC:/Users/unnar/Desktop/msc_verkefni/camera-settings-experiment/metavision_evt3_raw_file_decoder/build --check-stamp-file C:/Users/unnar/Desktop/msc_verkefni/camera-settings-experiment/metavision_evt3_raw_file_decoder/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

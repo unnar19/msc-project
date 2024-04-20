@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\unnar\Desktop\msc_verkefni\camera-settings-experiment\metavision_evt3_raw_file_decoder\metavision_evt3_raw_file_decoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\unnar\Desktop\msc_verkefni\camera-settings-experiment\metavision_evt3_raw_file_decoder\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{972B4829-5DB2-3D77-8EEB-55E5B2BC807F}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

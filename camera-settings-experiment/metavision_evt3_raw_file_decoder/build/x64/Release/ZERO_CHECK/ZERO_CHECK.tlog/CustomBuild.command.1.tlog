@@ -1,0 +1,10 @@
+^C:\USERS\UNNAR\DESKTOP\MSC_VERKEFNI\CAMERA-SETTINGS-EXPERIMENT\METAVISION_EVT3_RAW_FILE_DECODER\BUILD\CMAKEFILES\084E58C0A5C60B9FDA2DB1CD9A4B0C3C\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/unnar/Desktop/msc_verkefni/camera-settings-experiment/metavision_evt3_raw_file_decoder -BC:/Users/unnar/Desktop/msc_verkefni/camera-settings-experiment/metavision_evt3_raw_file_decoder/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/unnar/Desktop/msc_verkefni/camera-settings-experiment/metavision_evt3_raw_file_decoder/build/metavision_evt3_raw_file_decoder.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
