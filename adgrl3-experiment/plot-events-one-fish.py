@@ -2,11 +2,11 @@ import csv
 import matplotlib.pyplot as plt
 
 BASE_PATH = "adgrl3-clean-frame/2024-04-21/"
+COLORS = ['#499BDA', '#E5705C']
 
 EXPERIMENT = 4
-COMP_ID = "C6"
-ACC_TIME_MS = 600
-COLORS = ['#499BDA', '#E5705C']
+COMP_ID = "C7"
+ACC_TIME_MS = 1000
 
 with open(BASE_PATH + f"ex{EXPERIMENT}/compartments/{COMP_ID}.csv", mode='r') as file:
     csvFile = csv.reader(file)
