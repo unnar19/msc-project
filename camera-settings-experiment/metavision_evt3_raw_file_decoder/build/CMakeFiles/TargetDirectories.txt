@@ -1,3 +1,0 @@
-C:/Users/unnar/Desktop/msc_verkefni/camera-settings-experiment/metavision_evt3_raw_file_decoder/build/CMakeFiles/metavision_evt3_raw_file_decoder.dir
-C:/Users/unnar/Desktop/msc_verkefni/camera-settings-experiment/metavision_evt3_raw_file_decoder/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/unnar/Desktop/msc_verkefni/camera-settings-experiment/metavision_evt3_raw_file_decoder/build/CMakeFiles/ZERO_CHECK.dir
