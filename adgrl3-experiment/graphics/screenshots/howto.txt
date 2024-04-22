@@ -1,0 +1,10 @@
+record experimental setup with light to show outlines
+open .raw video in metavision studio
+export to .avi with gray background
+open in VLC (keeps resolution at 100% i.e 720p)
+screenshot frames showing the grid
+open them in image editing software
+make background gray
+set blending mode to something like soft light
+use rulers to find bounds of grid
+calculate the rest

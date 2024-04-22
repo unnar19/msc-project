@@ -1,2 +1,8 @@
 *.csv
 *.raw
+*.ini
+*.bias
+*.tmp_index
+*.avi
+metavision_evt3_raw_file_decoder/
+old-code/
