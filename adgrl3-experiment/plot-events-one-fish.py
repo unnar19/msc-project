@@ -5,8 +5,8 @@ BASE_PATH = "adgrl3-clean-frame/2024-04-21/"
 COLORS = ['#499BDA', '#E5705C']
 
 EXPERIMENT = 4
-COMP_ID = "C7"
-ACC_TIME_MS = 1000
+COMP_ID = "C0"
+ACC_TIME_MS = 50
 
 with open(BASE_PATH + f"ex{EXPERIMENT}/compartments/{COMP_ID}.csv", mode='r') as file:
     csvFile = csv.reader(file)

@@ -1,15 +1,14 @@
 import csv
 
-IN_PATH = 'clean-data-full-frame/'
-OUT_PATH = 'clean-data-no-spike/'
+IN_PATH = 'adgrl3-clean-frame/'
+OUT_PATH = 'adgrl3-clean-no-spike/'
+DATE = '2024-04-21'
 
-EXPERIMENT = 1
+EXPERIMENT = 4
 ALPH_MAP = ["A","B","C","D","E","F","G","H"]
 
 S_55 = 55*1000000
 S_65 = 65*1000000
-
-CHECK_FISH = 'E9'
 
 start_list = []
 stop_list = []
@@ -17,12 +16,12 @@ stop_list = []
 # Find start and stop time of spike using some fish
 # Check 58s to 65s
 for alph in ALPH_MAP:
-    for num in range(0,14):
+    for num in [0,13]:
         spike_start = S_55
         spike_stop = S_65
 
         comp_id = f"{alph}{num}"
-        with open(IN_PATH + f"ex{EXPERIMENT}/compartments/{comp_id}.csv", mode='r') as in_file:
+        with open(IN_PATH + DATE + f"/ex{EXPERIMENT}/compartments/{comp_id}.csv", mode='r') as in_file:
             reader = csv.reader(in_file)
             first = True
             
@@ -59,7 +58,7 @@ for alph in ALPH_MAP:
 print(f"AVG. SPIKE START: {int(sum(start_list)/len(start_list))}")
 print(f"AVG. SPIKE STOP:  {int(sum(stop_list)/len(stop_list))}") 
 
-with open(OUT_PATH + f"ex{EXPERIMENT}/no-spike-statistics.csv", mode='w', newline='') as stat_file:
+with open(OUT_PATH + DATE + f"/ex{EXPERIMENT}/no-spike-statistics.csv", mode='w', newline='') as stat_file:
     stat_writer = csv.writer(stat_file)
     stat_writer.writerow(["id","positive","negative","positive_light_on","positive_light_off","negative_light_on","negative_light_off"])
 
@@ -73,8 +72,8 @@ with open(OUT_PATH + f"ex{EXPERIMENT}/no-spike-statistics.csv", mode='w', newlin
             post_total = 0
 
             comp_id = f"{alph}{num}"
-            with open(OUT_PATH + f"ex{EXPERIMENT}/compartments/{comp_id}.csv", mode='w', newline='') as out_file:
-                with open(IN_PATH + f"ex{EXPERIMENT}/compartments/{comp_id}.csv", mode='r') as in_file:
+            with open(OUT_PATH + DATE + f"/ex{EXPERIMENT}/compartments/{comp_id}.csv", mode='w', newline='') as out_file:
+                with open(IN_PATH + DATE + f"/ex{EXPERIMENT}/compartments/{comp_id}.csv", mode='r') as in_file:
                     reader = csv.reader(in_file)
                     writer = csv.writer(out_file)
                     stat_writer = csv.writer(stat_file)

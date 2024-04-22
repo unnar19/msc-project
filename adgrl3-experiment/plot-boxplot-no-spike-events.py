@@ -1,14 +1,15 @@
 import csv
 import matplotlib.pyplot as plt
 
-BASE_PATH = "clean-data-no-spike/"
+BASE_PATH = "adgrl3-clean-no-spike/"
 FILE_NAME = "no-spike-statistics.csv"
+DATE = "2024-04-21"
 
 colors = ['#499BDA', '#E5705C', '#5D7D96', '#9A574C']
 
 for exp_i in range(1,6):
     data = []
-    with open(BASE_PATH + f"ex{exp_i}/" + FILE_NAME, mode='r') as file:
+    with open(BASE_PATH + DATE + f"/ex{exp_i}/" + FILE_NAME, mode='r') as file:
         csvFile = csv.reader(file)
         header = True
         event_on = []
@@ -47,4 +48,4 @@ for exp_i in range(1,6):
     plt.axis("tight")
     plt.grid(axis="y")
     plt.show()
-    fig.savefig(f"graphics/no-spike/box-plot-no-spike-ex{exp_i}.png")
+    fig.savefig(f"graphics/graphs/box-plot-no-spike-{DATE}-ex{exp_i}.png")
