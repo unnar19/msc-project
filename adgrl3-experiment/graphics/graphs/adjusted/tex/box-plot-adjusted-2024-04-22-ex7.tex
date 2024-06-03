@@ -1,0 +1,170 @@
+% This file was created with tikzplotlib v0.10.1.
+\begin{tikzpicture}
+
+\definecolor{cornflowerblue73155218}{RGB}{73,155,218}
+\definecolor{darkgray176}{RGB}{176,176,176}
+\definecolor{darkorange25512714}{RGB}{255,127,14}
+\definecolor{indianred22911292}{RGB}{229,112,92}
+\definecolor{sienna1548776}{RGB}{154,87,76}
+\definecolor{slategray93125150}{RGB}{93,125,150}
+
+\begin{axis}[
+tick align=outside,
+tick pos=left,
+x grid style={darkgray176},
+xmin=0.5, xmax=5.5,
+xtick style={color=black},
+xtick={1,2,3,4,5},
+xticklabels={Event +,Event -,,Noise +,Noise -},
+y grid style={darkgray176},
+ylabel={Kilo events [kE]},
+ymajorgrids,
+ymin=0, ymax=65000,
+ytick style={color=black},
+ytick={0,5000,10000,15000,20000,25000,30000,35000,40000,45000,50000,55000,60000,65000},
+yticklabels={0,5,10,15,20,25,30,35,40,45,50,55,60,65}
+]
+\path [draw=cornflowerblue73155218, fill=cornflowerblue73155218, thick]
+(axis cs:0.825,9646.5)
+--(axis cs:1.175,9646.5)
+--(axis cs:1.175,19379)
+--(axis cs:0.825,19379)
+--(axis cs:0.825,9646.5)
+--cycle;
+\addplot [black]
+table {%
+1 9646.5
+1 2012
+};
+\addplot [black]
+table {%
+1 19379
+1 32412
+};
+\addplot [black]
+table {%
+0.9125 2012
+1.0875 2012
+};
+\addplot [black]
+table {%
+0.9125 32412
+1.0875 32412
+};
+\addplot [black, mark=o, mark size=3, mark options={solid,fill opacity=0}, only marks]
+table {%
+1 35552
+1 37159
+1 34598
+1 34749
+};
+\path [draw=indianred22911292, fill=indianred22911292, thick]
+(axis cs:1.825,9053.25)
+--(axis cs:2.175,9053.25)
+--(axis cs:2.175,17009.5)
+--(axis cs:1.825,17009.5)
+--(axis cs:1.825,9053.25)
+--cycle;
+\addplot [black]
+table {%
+2 9053.25
+2 2321
+};
+\addplot [black]
+table {%
+2 17009.5
+2 27826
+};
+\addplot [black]
+table {%
+1.9125 2321
+2.0875 2321
+};
+\addplot [black]
+table {%
+1.9125 27826
+2.0875 27826
+};
+\addplot [black, mark=o, mark size=3, mark options={solid,fill opacity=0}, only marks]
+table {%
+2 29827
+2 30662
+2 29247
+};
+\path [draw=slategray93125150, fill=slategray93125150, thick]
+(axis cs:3.825,3824.25)
+--(axis cs:4.175,3824.25)
+--(axis cs:4.175,6252.25)
+--(axis cs:3.825,6252.25)
+--(axis cs:3.825,3824.25)
+--cycle;
+\addplot [black]
+table {%
+4 3824.25
+4 3375
+};
+\addplot [black]
+table {%
+4 6252.25
+4 8834
+};
+\addplot [black]
+table {%
+3.9125 3375
+4.0875 3375
+};
+\addplot [black]
+table {%
+3.9125 8834
+4.0875 8834
+};
+\path [draw=sienna1548776, fill=sienna1548776, thick]
+(axis cs:4.825,4075.75)
+--(axis cs:5.175,4075.75)
+--(axis cs:5.175,6613)
+--(axis cs:4.825,6613)
+--(axis cs:4.825,4075.75)
+--cycle;
+\addplot [black]
+table {%
+5 4075.75
+5 3661
+};
+\addplot [black]
+table {%
+5 6613
+5 9446
+};
+\addplot [black]
+table {%
+4.9125 3661
+5.0875 3661
+};
+\addplot [black]
+table {%
+4.9125 9446
+5.0875 9446
+};
+\addplot [darkorange25512714]
+table {%
+0.825 12430
+1.175 12430
+};
+\addplot [darkorange25512714]
+table {%
+1.825 11548.5
+2.175 11548.5
+};
+\addplot [darkorange25512714]
+table {%
+3.825 5095.5
+4.175 5095.5
+};
+\addplot [darkorange25512714]
+table {%
+4.825 5335
+5.175 5335
+};
+\end{axis}
+
+\end{tikzpicture}

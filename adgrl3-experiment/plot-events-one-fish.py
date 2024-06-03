@@ -1,14 +1,17 @@
 import csv
 import matplotlib.pyplot as plt
+import numpy as np
 
-BASE_PATH = "adgrl3-clean-frame/2024-04-21/"
+BASE_PATH = "adgrl3-clean-adjusted/"
+DATE = "2024-04-22"
 COLORS = ['#499BDA', '#E5705C']
 
-EXPERIMENT = 4
-COMP_ID = "C0"
-ACC_TIME_MS = 50
+EXPERIMENT = 8
+COMP_ID = "G7"
+ACC_TIME_MS = 1000
+SPIKE_TIME = 178
 
-with open(BASE_PATH + f"ex{EXPERIMENT}/compartments/{COMP_ID}.csv", mode='r') as file:
+with open(BASE_PATH + DATE + f"/ex{EXPERIMENT}/compartments/{COMP_ID}.csv", mode='r') as file:
     csvFile = csv.reader(file)
     header = True
     first = True
@@ -49,18 +52,26 @@ with open(BASE_PATH + f"ex{EXPERIMENT}/compartments/{COMP_ID}.csv", mode='r') as
         else:
             header = False
 
+ymin = min([min(event_on),min(event_off)])
+ymax = max([max(event_on),max(event_off)])
+
 fig = plt.figure(figsize=(10, 6))
 plt.plot(time_axis, event_on, color=COLORS[0], linewidth=2)
 plt.plot(time_axis, event_off, color=COLORS[1])
+plt.vlines(SPIKE_TIME, 0, ymax*1.1, "k")
+time_step_axis = np.linspace(min(time_axis),max(time_axis),100000)
+plt.fill_between(time_step_axis, 0, ymax*1.1, where=(np.array(time_step_axis) >= SPIKE_TIME) & (np.array(time_step_axis) <= max(time_step_axis)), color='gray', alpha=0.2)
 
 
 #plt.yticks(plt.yticks()[0], [int(tick/1000) for tick in plt.yticks()[0]])
 plt.ylim(bottom=0)
-plt.title(f"Events in experiment {EXPERIMENT} over time for fish {COMP_ID} (Events sampled at {ACC_TIME_MS}ms)")
+plt.title(f"Events in experiment {EXPERIMENT} on {DATE} over time for fish {COMP_ID} (Events sampled at {ACC_TIME_MS}ms)")
 plt.ylabel("Events [Ev]")
 plt.xlabel("Time [s]")
 #plt.axis("tight")
 plt.legend(["Positive","Negative"])
 plt.grid(axis="y")
+plt.xlim([0,356])
+plt.ylim([0, ymax*1.1])
 plt.show()
 #fig.savefig(f"graphics/plot-one-fish-ex{EXPERIMENT}-{COMP_ID.lower()}.png")

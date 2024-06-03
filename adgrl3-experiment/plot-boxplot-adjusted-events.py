@@ -1,10 +1,11 @@
 import csv
 import matplotlib.pyplot as plt
+import tikzplotlib
 
-BASE_PATH = "adgrl3-clean-frame/"
-DATES = ["2024-04-21","2024-04-22"]
+BASE_PATH = "adgrl3-clean-adjusted/"
+FILE_NAME = "adjusted-statistics.csv"
+DATES = ["2024-04-21", "2024-04-22"]
 EXPERIMENTS = [4,8]
-FILE_NAME = "statistics.csv"
 
 colors = ['#499BDA', '#E5705C', '#5D7D96', '#9A574C']
 
@@ -41,11 +42,14 @@ for date_i, date in enumerate(DATES):
             box.set(color=color, linewidth=2)
             box.set_facecolor(color)
 
+
         plt.axis([0.5, 5.5, 0, 65000])
         plt.yticks(range(0, 65001, 5000), [str(int(ytick / 1000)) for ytick in range(0, 65001, 5000)])
+
         plt.xticks(range(1,6), ["Event +","Event -","","Noise +","Noise -"])
-        plt.title(f"Box plot of all events on {date} in experiment {exp_i}")
+        plt.title(f"Box plot of adjusted events in experiment {exp_i}")
         plt.ylabel("Kilo events [kE]")
         plt.grid(axis="y")
         plt.show()
-        fig.savefig(f"graphics/graphs/all-events/box-plot-all-events-{date}-ex{exp_i}.png")
+        #fig.savefig(f"graphics/graphs/adjusted/box-plot-adjusted-{date}-ex{exp_i}.png")
+        #tikzplotlib.save(f"graphics/graphs/adjusted/tex/box-plot-adjusted-{date}-ex{exp_i}.tex")

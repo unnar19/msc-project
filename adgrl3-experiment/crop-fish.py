@@ -1,14 +1,14 @@
 import csv
 from time import time
 
-BASE_PATH = 'adgrl3-clean-frame/2024-04-21/ex4/'
+BASE_PATH = 'adgrl3-clean-frame/2024-04-22/ex8/'
 FILE_NAME = 'data.csv'
 
 COMPARTMENTS_X = 12
 COMPARTMENTS_Y = 8
 
-OFFSET_X = 219
-OFFSET_Y = 57
+OFFSET_X = 220
+OFFSET_Y = 59
 
 SIZE_X = 66
 SIZE_Y = 66

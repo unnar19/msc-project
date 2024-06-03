@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 BASE_PATH = "clean-data-full-frame/"
 BASE_PATH2 = "clean-data-no-spike/"
 
-EXPERIMENT = 2
-COMP_ID = "C7"
+EXPERIMENT = 5
+COMP_ID = "C4"
 ACC_TIME_MS = 1000
 COLORS = ['#499BDA', '#E5705C']
 
