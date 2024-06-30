@@ -8,7 +8,7 @@ EXPERIMENTS = [4,8]
 ALPH_MAP = ["A","B","C","D","E","F","G","H"]
 
 SPRINT_THRESHOLD_US = 15000
-MIN_EVENTS_PER_SPRINT = 40
+MIN_EVENTS_PER_SPRINT = 20
 
 COMPARTMENTS = [f"{alph}{num}" for alph in ALPH_MAP for num in range(1,13)]
 NOISE = [f"{alph}{num}" for alph in ALPH_MAP for num in [0,13]]
@@ -33,6 +33,8 @@ for date_i, date in enumerate(DATES):
         new_average = int(sum(average_time_diff) / len(average_time_diff))
         print(f"{exp_i}  \t{new_average:.0f}")
 
+
+quit()
 count = 0
 for date_i, date in enumerate(DATES):
     for exp_i in range(1,EXPERIMENTS[date_i]+1):
@@ -61,13 +63,14 @@ for date_i, date in enumerate(DATES):
                             if event_count >= MIN_EVENTS_PER_SPRINT:
                                 #a sprint was detected between sprint_start_time and last_time
                                 duration = last_time - sprint_start_time
-                                sprint_count += 1
-                                csvWriter.writerow([duration, sprint_start_time, last_time])
-                                #print(f"{duration/1000:.0f}ms ({sprint_start_time/1000:.2f} to {last_time/1000:.2f})")
+                                #sprint_count += 1
+                                #csvWriter.writerow([duration, sprint_start_time, last_time])
+                                print(f"{duration/1000:.0f}ms ({sprint_start_time/1000:.2f} to {last_time/1000:.2f})")
 
                             event_count = 0
 
                         last_time = time
+                    input("next?")
         count += 1
         print(f"{count}/{sum(EXPERIMENTS)}")
                 

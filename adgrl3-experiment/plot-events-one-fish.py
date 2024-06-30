@@ -6,8 +6,8 @@ BASE_PATH = "adgrl3-clean-adjusted/"
 DATE = "2024-04-22"
 COLORS = ['#499BDA', '#E5705C']
 
-EXPERIMENT = 8
-COMP_ID = "G7"
+EXPERIMENT = 4
+COMP_ID = "B10"
 ACC_TIME_MS = 1000
 SPIKE_TIME = 178
 
