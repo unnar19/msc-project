@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 BASE_PATH = "clean-data-full-frame/"
 BASE_PATH2 = "clean-data-no-spike/"
 
-EXPERIMENT = 5
-COMP_ID = "C4"
+EXPERIMENT = 4
+COMP_ID = "D4"
 ACC_TIME_MS = 1000
 COLORS = ['#499BDA', '#E5705C']
 
@@ -50,7 +50,7 @@ with open(BASE_PATH2 + f"ex{EXPERIMENT}/compartments/{COMP_ID}.csv", mode='r') a
         else:
             header = False
 
-fig = plt.figure(figsize=(10, 6))
+fig = plt.figure(figsize=(8, 4))
 plt.plot(time_axis, event_on, color=COLORS[0])
 plt.plot(time_axis, event_off, color=COLORS[1])
 

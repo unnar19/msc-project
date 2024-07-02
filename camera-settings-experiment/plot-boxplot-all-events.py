@@ -47,4 +47,4 @@ for exp_i in range(1,6):
     plt.axis("tight")
     plt.grid(axis="y")
     plt.show()
-    fig.savefig(f"graphics/box-plot-all-events-ex{exp_i}.png")
+    #fig.savefig(f"graphics/box-plot-all-events-ex{exp_i}.png")

@@ -27,6 +27,7 @@ mutant_all_events = [[] for _ in range(BIN_COUNT)]
 wildtype_all_events = [[] for _ in range(BIN_COUNT)]
 
 ymax = 0
+fig = plt.figure(figsize=(8, 4))
 
 for date_i, date in enumerate(DATES):
     for exp_i, exp in enumerate(EXPERIMENTS[date_i]):
@@ -126,7 +127,7 @@ wildtype2 = Line2D([0], [0], marker=".", linestyle="none", color='r', alpha=0.2)
 black = Line2D([0], [0], color='k')
 
 plt.title("Event count over time for all fish with accumulation time ~30s")
-plt.legend([(mutant1,mutant2), (wildtype1,wildtype2), black] ,["adgrl3.1","WT","Light off"])
+plt.legend([(mutant1,mutant2), (wildtype1,wildtype2), black] ,["adgrl3.1","WT","Light off"],loc="upper right")
 plt.xlim([0,357])
 plt.ylabel("Event count [#]")
 plt.xlabel("Time [s]")
@@ -135,6 +136,6 @@ plt.grid(axis="y")
 plt.vlines(SPIKE_TIME, 0, ymax*1.1, "k")
 time_step_axis = np.linspace(min(time_axis),357,100000)
 plt.fill_between(time_step_axis, 0, ymax*1.1, where=(np.array(time_step_axis) >= SPIKE_TIME) & (np.array(time_step_axis) <= 357), color='gray', alpha=0.2)
-plt.ylim([0, ymax*1.1])
+plt.ylim([0, 8000])
 plt.show()
-#fig.savefig(f"graphics/plot-one-fish-ex{EXPERIMENT}-{COMP_ID.lower()}.png")
+fig.savefig(f"graphics/graphs/plot-all-fish.png")
