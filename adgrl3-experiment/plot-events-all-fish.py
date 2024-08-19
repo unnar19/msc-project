@@ -113,9 +113,11 @@ wildtype_whole_average = wildtype_whole_average/6
 
 print(f"p-value\tSignificant")
 for bin_i in range(BIN_COUNT):
-    _, p_value = stats.ttest_ind(mutant_all_events[bin_i], wildtype_all_events[bin_i])
-    p_value_one_tailed = p_value / 2
-    print(f"{p_value_one_tailed:.5f}\t{bool(p_value_one_tailed < 0.05)}")
+    #_, p_value = stats.ttest_ind(mutant_all_events[bin_i], wildtype_all_events[bin_i])
+    #p_value_one_tailed = p_value / 2
+    #print(f"{p_value_one_tailed:.5f}\t{bool(p_value_one_tailed < 0.05)}")
+    _, p_value = stats.mannwhitneyu(mutant_all_events[bin_i], wildtype_all_events[bin_i])
+    print(f"{p_value:.5f}\t{bool(p_value < 0.05)}")
 
 plt.plot(time_axis_file_average,mutant_whole_average, color=COLORS[0])
 plt.plot(time_axis_file_average,wildtype_whole_average, color=COLORS[1])
@@ -138,4 +140,4 @@ time_step_axis = np.linspace(min(time_axis),357,100000)
 plt.fill_between(time_step_axis, 0, ymax*1.1, where=(np.array(time_step_axis) >= SPIKE_TIME) & (np.array(time_step_axis) <= 357), color='gray', alpha=0.2)
 plt.ylim([0, 8000])
 plt.show()
-fig.savefig(f"graphics/graphs/plot-all-fish.png")
+#fig.savefig(f"graphics/graphs/plot-all-fish.png")

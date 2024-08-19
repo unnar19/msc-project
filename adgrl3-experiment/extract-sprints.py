@@ -8,7 +8,7 @@ EXPERIMENTS = [4,8]
 ALPH_MAP = ["A","B","C","D","E","F","G","H"]
 
 SPRINT_THRESHOLD_US = 15000
-MIN_EVENTS_PER_SPRINT = 10
+MIN_EVENTS_PER_SPRINT = 20
 
 COMPARTMENTS = [f"{alph}{num}" for alph in ALPH_MAP for num in range(1,13)]
 NOISE = [f"{alph}{num}" for alph in ALPH_MAP for num in [0,13]]

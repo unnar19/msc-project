@@ -29,11 +29,33 @@ for date_i, date in enumerate(DATES):
                         event_off.append(int(line[2]))
                 else:
                     header = False
+                    
         data.append(event_on)
         data.append(event_off)
         data.append(noise_on)
         data.append(noise_off)
 
+        e_on = sum(event_on)/len(event_on)
+        e_off= sum(event_off)/len(event_off)
+        n_on = sum(noise_on)/len(noise_on)
+        n_off= sum(noise_off)/len(noise_off)
+        
+        signal_and_noise = e_on + e_off
+        noise = n_on + n_off
+        signal = signal_and_noise - noise
+
+        SNR = signal/noise
+        PNR = (e_on + n_on)/(e_off + n_off)
+
+        print(f"\n{e_on:.0f} & {e_off:.0f} & {n_on:.0f} & {n_off:.0f}")
+
+        print(f"\ne on  {int(round(e_on,0))}")
+        print(f"e off {int(round(e_off,0))}")
+        print(f"n on  {int(round(n_on,0))}")
+        print(f"n off {int(round(n_off,0))}\n")
+        
+        print(f"SNR = {SNR:.5f}")
+        print(f"PNR = {PNR:.5f}")
 
         fig = plt.figure(figsize=(6, 7))
         events = plt.boxplot(data, positions=[1,2,4,5], widths=0.35, patch_artist=True)

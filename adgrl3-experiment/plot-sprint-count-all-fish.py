@@ -86,9 +86,12 @@ for date_i, date in enumerate(DATES):
 
 print(f"p-value\tSignificant")
 for bin_i in range(BIN_COUNT):
-    _, p_value = stats.ttest_ind(mutant_all_sprints[bin_i], wildtype_all_sprints[bin_i])
-    p_value_one_tailed = p_value / 2
-    print(f"{p_value_one_tailed:.5f}\t{bool(p_value_one_tailed < 0.05)}")
+    # _, p_value = stats.ttest_ind(mutant_all_sprints[bin_i], wildtype_all_sprints[bin_i])
+    # p_value_one_tailed = p_value / 2
+    # print(f"{p_value_one_tailed:.5f}\t{bool(p_value_one_tailed < 0.05)}")
+    _, p_value = stats.mannwhitneyu(mutant_all_sprints[bin_i], wildtype_all_sprints[bin_i])
+    print(f"{p_value:.5f}\t{bool(p_value < 0.05)}")
+    
 
 plt.plot((bin_stop_time - ACC_TIME_MS/2)/1000,mutant_sprint_count/divider, color=COLORS[0])
 plt.plot((bin_stop_time - ACC_TIME_MS/2)/1000,wildtype_sprint_count/divider, color=COLORS[1])
