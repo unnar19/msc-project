@@ -5,7 +5,7 @@ import numpy as np
 BASE_PATH = "adgrl3-clean-adjusted/"
 DATES = ["2024-04-21","2024-04-22"]
 EXPERIMENTS = [4,8]
-EXPERIMENTS = [[2,4],[2,4,6,7]]
+EXPERIMENTS = [[2,4],[2,4,6,8]]
 ALPH_MAP = ["A","B","C","D","E","F","G","H"]
 
 SPRINT_THRESHOLD_US = 15000

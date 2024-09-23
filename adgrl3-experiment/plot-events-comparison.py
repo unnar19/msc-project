@@ -6,7 +6,7 @@ import tikzplotlib
 BASE_PATH = "adgrl3-clean-adjusted/"
 FILE_NAME = "adjusted-statistics.csv"
 DATES = ["2024-04-21", "2024-04-22"]
-EXPERIMENTS = [[2,4],[2,4,6,7]]
+EXPERIMENTS = [[2,4],[2,4,6,8]]
 MUTANTS_ON_LEFT = [[1,0],[0,1,0,1]]
 
 mutant_events = []

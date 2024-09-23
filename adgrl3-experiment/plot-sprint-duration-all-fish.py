@@ -10,7 +10,7 @@ COLORS = ["#0000FF", "#FF0000"]
 ALPH_MAP = ["A","B","C","D","E","F","G","H"]
 
 DATES = ["2024-04-21", "2024-04-22"]
-EXPERIMENTS = [[2,4],[2,4,6,7]]
+EXPERIMENTS = [[2,4],[2,4,6,8]]
 MUTANTS_ON_LEFT = [[1,0],[0,1,0,1]]
 
 WHOLE_TIME = 357
@@ -29,6 +29,8 @@ wildtype_all_sprints = [[] for _ in range(BIN_COUNT)]
 
 ymax = 0
 divider = 0
+
+fig = plt.figure(figsize=(8, 4))
 
 for date_i, date in enumerate(DATES):
     for exp_i, exp in enumerate(EXPERIMENTS[date_i]):
@@ -118,7 +120,44 @@ plt.grid(axis="y")
 plt.vlines(SPIKE_TIME, 0, ymax*1.1, "k")
 time_step_axis = np.linspace(0,357,100000)
 plt.fill_between(time_step_axis, 0, ymax*1.1, where=(np.array(time_step_axis) >= SPIKE_TIME) & (np.array(time_step_axis) <= 357), color='gray', alpha=0.2)
-plt.ylim([0, ymax*1.1])
+plt.ylim([0, ymax*0.15])
 plt.show()
 
-#fig.savefig(f"graphics/plot-one-fish-ex{EXPERIMENT}-{COMP_ID.lower()}.png")
+# fig.savefig(f"graphics/graphs/plot-sprint-duration-all-fish.png")
+
+
+
+mutant_on  = sum(mutant_sprint_dur[:6], [])
+mutant_off = sum(mutant_sprint_dur[6:], [])
+
+wildtype_on  = sum(wildtype_sprint_dur[:6], [])
+wildtype_off = sum(wildtype_sprint_dur[6:], [])
+
+
+plt.figure(figsize=(10, 8))
+
+plt.subplot(1, 2, 1)
+stats.probplot(mutant_on, dist="norm", plot=plt)
+plt.title(f"Q-Q Plot for Mutant Data (Lights on)")
+
+plt.subplot(1, 2, 2)
+stats.probplot(wildtype_on, dist="norm", plot=plt)
+plt.title(f"Q-Q Plot for Wildtype Data (Lights on)")
+
+plt.tight_layout()
+plt.show()
+
+
+
+plt.figure(figsize=(10, 8))
+
+plt.subplot(1, 2, 1)
+stats.probplot(mutant_off, dist="norm", plot=plt)
+plt.title(f"Q-Q Plot for Mutant Data  (Lights off)")
+
+plt.subplot(1, 2, 2)
+stats.probplot(wildtype_off, dist="norm", plot=plt)
+plt.title(f"Q-Q Plot for Wildtype Data (Lights off)")
+
+plt.tight_layout()
+plt.show()

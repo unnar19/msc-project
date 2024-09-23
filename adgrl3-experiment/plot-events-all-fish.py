@@ -10,7 +10,7 @@ COLORS = ["#0000FF", "#FF0000"]
 ALPH_MAP = ["A","B","C","D","E","F","G","H"]
 
 DATES = ["2024-04-21", "2024-04-22"]
-EXPERIMENTS = [[2,4],[2,4,6,7]]
+EXPERIMENTS = [[2,4],[2,4,6,8]]
 MUTANTS_ON_LEFT = [[1,0],[0,1,0,1]]
 
 WHOLE_TIME = 357
@@ -111,13 +111,20 @@ for date_i, date in enumerate(DATES):
 mutant_whole_average = mutant_whole_average/6
 wildtype_whole_average = wildtype_whole_average/6
 
+print(f"Non parametric (Not normal distribution)")
 print(f"p-value\tSignificant")
 for bin_i in range(BIN_COUNT):
-    #_, p_value = stats.ttest_ind(mutant_all_events[bin_i], wildtype_all_events[bin_i])
-    #p_value_one_tailed = p_value / 2
-    #print(f"{p_value_one_tailed:.5f}\t{bool(p_value_one_tailed < 0.05)}")
     _, p_value = stats.mannwhitneyu(mutant_all_events[bin_i], wildtype_all_events[bin_i])
     print(f"{p_value:.5f}\t{bool(p_value < 0.05)}")
+
+print(f"Parametric (Normal distribution)")
+print(f"p-value\tSignificant")
+for bin_i in range(BIN_COUNT):
+    _, p_value = stats.ttest_ind(mutant_all_events[bin_i], wildtype_all_events[bin_i])
+    p_value_one_tailed = p_value / 2
+    print(f"{p_value_one_tailed:.5f}\t{bool(p_value_one_tailed < 0.05)}")
+
+
 
 plt.plot(time_axis_file_average,mutant_whole_average, color=COLORS[0])
 plt.plot(time_axis_file_average,wildtype_whole_average, color=COLORS[1])
@@ -141,3 +148,39 @@ plt.fill_between(time_step_axis, 0, ymax*1.1, where=(np.array(time_step_axis) >=
 plt.ylim([0, 8000])
 plt.show()
 #fig.savefig(f"graphics/graphs/plot-all-fish.png")
+
+
+mutant_on  = sum(mutant_all_events[:6], [])
+mutant_off = sum(mutant_all_events[6:], [])
+
+wildtype_on  = sum(wildtype_all_events[:6], [])
+wildtype_off = sum(wildtype_all_events[6:], [])
+
+
+plt.figure(figsize=(10, 8))
+
+plt.subplot(1, 2, 1)
+stats.probplot(mutant_on, dist="norm", plot=plt)
+plt.title(f"Q-Q Plot for Mutant Data (Lights on)")
+
+plt.subplot(1, 2, 2)
+stats.probplot(wildtype_on, dist="norm", plot=plt)
+plt.title(f"Q-Q Plot for Wildtype Data (Lights on)")
+
+plt.tight_layout()
+plt.show()
+
+
+
+plt.figure(figsize=(10, 8))
+
+plt.subplot(1, 2, 1)
+stats.probplot(mutant_off, dist="norm", plot=plt)
+plt.title(f"Q-Q Plot for Mutant Data  (Lights off)")
+
+plt.subplot(1, 2, 2)
+stats.probplot(wildtype_off, dist="norm", plot=plt)
+plt.title(f"Q-Q Plot for Wildtype Data (Lights off)")
+
+plt.tight_layout()
+plt.show()
