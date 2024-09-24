@@ -69,7 +69,6 @@ for date_i, date in enumerate(DATES):
     for exp_i, exp in enumerate(EXPERIMENTS[date_i]):
 
         mutants_on_left = bool(MUTANTS_ON_LEFT[date_i][exp_i])
-        print(mutants_on_left)
 
         for alph in ALPH_MAP:
             for num in range(1,13):
