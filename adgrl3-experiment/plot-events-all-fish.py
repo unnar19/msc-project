@@ -147,7 +147,7 @@ time_step_axis = np.linspace(min(time_axis),357,100000)
 plt.fill_between(time_step_axis, 0, ymax*1.1, where=(np.array(time_step_axis) >= SPIKE_TIME) & (np.array(time_step_axis) <= 357), color='gray', alpha=0.2)
 plt.ylim([0, 8000])
 plt.show()
-#fig.savefig(f"graphics/graphs/plot-all-fish.png")
+fig.savefig(f"graphics/graphs/plot-all-fish.png")
 
 
 mutant_on  = sum(mutant_all_events[:6], [])
@@ -156,43 +156,40 @@ mutant_off = sum(mutant_all_events[6:], [])
 wildtype_on  = sum(wildtype_all_events[:6], [])
 wildtype_off = sum(wildtype_all_events[6:], [])
 
-
-plt.figure(figsize=(10, 8))
+fig1 = plt.figure(figsize=(10, 8))
 
 plt.subplot(1, 2, 1)
 stats.probplot(mutant_on, dist="norm", plot=plt)
 plt.gca().get_lines()[0].set_color('blue')
 plt.gca().get_lines()[1].set_color('k')
 plt.title(f"Event count Q-Q Plot for ADGRL3.1 (Lights on)")
-fig.savefig(f"graphics/graphs/qqplots/ec_qq_adgrl_on.png")
 
 plt.subplot(1, 2, 2)
 stats.probplot(wildtype_on, dist="norm", plot=plt)
 plt.gca().get_lines()[0].set_color('red')
 plt.gca().get_lines()[1].set_color('k')
 plt.title(f"Event count Q-Q Plot for WT (Lights on)")
-fig.savefig(f"graphics/graphs/qqplots/ec_qq_wt_on.png")
+fig1.savefig(f"graphics/graphs/qqplots/ec_qq_on.png")
 
 plt.tight_layout()
 plt.show()
 
 
 
-plt.figure(figsize=(10, 8))
+fig2 = plt.figure(figsize=(10, 8))
 
 plt.subplot(1, 2, 1)
 stats.probplot(mutant_off, dist="norm", plot=plt)
 plt.gca().get_lines()[0].set_color('blue')
 plt.gca().get_lines()[1].set_color('k')
 plt.title(f"Event count Q-Q Plot for ADGRL3.1 (Lights off)")
-fig.savefig(f"graphics/graphs/qqplots/ec_qq_adgrl_off.png")
 
 plt.subplot(1, 2, 2)
 stats.probplot(wildtype_off, dist="norm", plot=plt)
 plt.gca().get_lines()[0].set_color('red')
 plt.gca().get_lines()[1].set_color('k')
 plt.title(f"Event count Q-Q Plot for WT (Lights off")
-fig.savefig(f"graphics/graphs/qqplots/ec_qq_wt_off.png")
+fig2.savefig(f"graphics/graphs/qqplots/ec_qq_off.png")
 
 plt.tight_layout()
 plt.show()

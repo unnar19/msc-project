@@ -141,7 +141,7 @@ plt.fill_between(time_step_axis, 0, ymax*1.1, where=(np.array(time_step_axis) >=
 plt.ylim([0, ymax*0.15])
 plt.show()
 
-# fig.savefig(f"graphics/graphs/plot-sprint-duration-all-fish.png")
+fig.savefig(f"graphics/graphs/plot-sprint-duration-all-fish.png")
 
 
 
@@ -152,42 +152,40 @@ wildtype_on  = sum(wildtype_sprint_dur[:6], [])
 wildtype_off = sum(wildtype_sprint_dur[6:], [])
 
 
-plt.figure(figsize=(10, 8))
+fig1 = plt.figure(figsize=(10, 8))
 
 plt.subplot(1, 2, 1)
 stats.probplot(mutant_on, dist="norm", plot=plt)
 plt.gca().get_lines()[0].set_color('blue')
 plt.gca().get_lines()[1].set_color('k')
 plt.title(f"Mean sprint duration Q-Q Plot for ADGRL3.1 (Lights on)")
-fig.savefig(f"graphics/graphs/qqplots/sd_qq_adgrl_on.png")
 
 plt.subplot(1, 2, 2)
 stats.probplot(wildtype_on, dist="norm", plot=plt)
 plt.gca().get_lines()[0].set_color('red')
 plt.gca().get_lines()[1].set_color('k')
 plt.title(f"Mean sprint duration Q-Q Plot for WT (Lights on)")
-fig.savefig(f"graphics/graphs/qqplots/sd_qq_wt_on.png")
+fig1.savefig(f"graphics/graphs/qqplots/sd_qq_on.png")
 
 plt.tight_layout()
 plt.show()
 
 
 
-plt.figure(figsize=(10, 8))
+fig2 = plt.figure(figsize=(10, 8))
 
 plt.subplot(1, 2, 1)
 stats.probplot(mutant_off, dist="norm", plot=plt)
 plt.gca().get_lines()[0].set_color('blue')
 plt.gca().get_lines()[1].set_color('k')
 plt.title(f"Mean sprint duration Q-Q Plot for ADGRL3.1 (Lights off)")
-fig.savefig(f"graphics/graphs/qqplots/sd_qq_adgrl_off.png")
 
 plt.subplot(1, 2, 2)
 stats.probplot(wildtype_off, dist="norm", plot=plt)
 plt.gca().get_lines()[0].set_color('red')
 plt.gca().get_lines()[1].set_color('k')
 plt.title(f"Mean sprint duration Q-Q Plot for WT (Lights off)")
-fig.savefig(f"graphics/graphs/qqplots/sd_qq_wt_off.png")
+fig2.savefig(f"graphics/graphs/qqplots/sd_qq_off.png")
 
 plt.tight_layout()
 plt.show()

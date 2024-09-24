@@ -113,10 +113,10 @@ plt.grid(axis="y")
 plt.vlines(SPIKE_TIME, 0, ymax*1.1, "k")
 time_step_axis = np.linspace(0,357,100000)
 plt.fill_between(time_step_axis, 0, ymax*1.1, where=(np.array(time_step_axis) >= SPIKE_TIME) & (np.array(time_step_axis) <= 357), color='gray', alpha=0.2)
-plt.ylim([0, ymax*1.1])
+plt.ylim([0, ymax*0.6])
 plt.show()
 
-# fig.savefig(f"graphics/graphs/plot-sprint-count-all-fish.png")
+fig.savefig(f"graphics/graphs/plot-sprint-count-all-fish.png")
 
 mutant_on  = sum(mutant_all_sprints[:6], [])
 mutant_off = sum(mutant_all_sprints[6:], [])
@@ -125,42 +125,40 @@ wildtype_on  = sum(wildtype_all_sprints[:6], [])
 wildtype_off = sum(wildtype_all_sprints[6:], [])
 
 
-plt.figure(figsize=(10, 8))
+fig1 = plt.figure(figsize=(10, 8))
 
 plt.subplot(1, 2, 1)
 stats.probplot(mutant_on, dist="norm", plot=plt)
 plt.gca().get_lines()[0].set_color('blue')
 plt.gca().get_lines()[1].set_color('k')
 plt.title(f"Sprint count Q-Q Plot for ADGRL3.1 (Lights on)")
-fig.savefig(f"graphics/graphs/qqplots/sc_qq_adgrl_on.png")
 
 plt.subplot(1, 2, 2)
 stats.probplot(wildtype_on, dist="norm", plot=plt)
 plt.gca().get_lines()[0].set_color('red')
 plt.gca().get_lines()[1].set_color('k')
 plt.title(f"Sprint count Q-Q Plot for WT (Lights on)")
-fig.savefig(f"graphics/graphs/qqplots/sc_qq_wt_on.png")
+fig1.savefig(f"graphics/graphs/qqplots/sc_qq_on.png")
 
 plt.tight_layout()
 plt.show()
 
 
 
-plt.figure(figsize=(10, 8))
+fig2 = plt.figure(figsize=(10, 8))
 
 plt.subplot(1, 2, 1)
 stats.probplot(mutant_off, dist="norm", plot=plt)
 plt.gca().get_lines()[0].set_color('blue')
 plt.gca().get_lines()[1].set_color('k')
 plt.title(f"Sprint count Q-Q Plot for ADGRL3.1 (Lights off)")
-fig.savefig(f"graphics/graphs/qqplots/sc_qq_adgrl_off.png")
 
 plt.subplot(1, 2, 2)
 stats.probplot(wildtype_off, dist="norm", plot=plt)
 plt.gca().get_lines()[0].set_color('red')
 plt.gca().get_lines()[1].set_color('k')
 plt.title(f"Sprint count Q-Q Plot for WT (Lights off)")
-fig.savefig(f"graphics/graphs/qqplots/sc_qq_wt_off.png")
+fig2.savefig(f"graphics/graphs/qqplots/sc_qq_off.png")
 
 plt.tight_layout()
 plt.show()
