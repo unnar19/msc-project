@@ -33,10 +33,49 @@ tm_mutant_off = []
 tm_wildtype_on = []
 tm_wildtype_off = []
 
-comp_ids = []
-for alph in ALPH_MAP:
-    for num in range(1,13):
-        comp_ids.append(f"{alph}{num}")
+def result(actual, prediction):
+    """
+    pred   act
+    WT    WT     = TP
+    ADGRL ADGRL  = TN
+    WT    ADGRL  = FP
+    ADGRL WT     = FN
+
+    counts = [TP, TN, FP, FN]
+    """
+    res = []
+    counts = [0,0,0,0]
+
+    for act, pred in zip(actual, prediction):
+        if pred == "WT" and act == "WT":
+            res.append("TP")
+            counts[0] += 1
+        elif pred == "ADGRL" and act == "ADGRL":
+            res.append("TN")
+            counts[1] += 1
+        elif pred == "WT" and act == "ADGRL":
+            res.append("FP")
+            counts[2] += 1
+        elif pred == "ADGRL" and act == "WT":
+            res.append("FN")
+            counts[3] += 1
+
+    return res, counts
+
+def confusion_matrix(counts):
+    TP, TN, FP, FN = counts
+    print(f"  {'  ':>5} Predicted")
+    print(f"A {'  ':>5} {'WT':>5} {'ADGRL':>5}")
+    print(f"c {'WT':>5} {TP:>5} {FN:>5}")
+    print(f"t {'ADGRL':>5} {FP:>5} {TN:>5}\n")
+
+    prec = TP/(TP + FP)
+    rec =  TP/(TP + FN)
+    acc = (TP + TN)/(TP + FN + TN + FP)
+
+    return prec, rec, acc
+
+    
 
 def plot_histogram_bins(mutant_on, mutant_off, wildtype_on, wildtype_off,metric,ymax,bins,unit):
     fig = plt.figure(figsize=(10, 6))
@@ -44,10 +83,10 @@ def plot_histogram_bins(mutant_on, mutant_off, wildtype_on, wildtype_off,metric,
 
     plt.subplot(1, 2, 1)
     plt.hist(mutant_on, bins=bins, color="blue", alpha=0.5, rwidth=0.85, label="ADGRL3.1")
-    # plt.axvline(x=np.mean(mutant_on), color="blue", label="ADGRL3.1 Mean")
+    plt.axvline(x=np.mean(mutant_on), color="blue", linestyle="dashed", label="ADGRL3.1 Mean")
     plt.hist(wildtype_on, bins=bins, color="red", alpha=0.5, rwidth=0.85, label="WT")
+    plt.axvline(x=np.mean(wildtype_on), color="red", linestyle="dashed", label="WT Mean")
     plt.axvline(x=np.mean(wildtype_on + mutant_on), color="k", label="Mean")
-    # plt.axvline(x=np.mean(wildtype_on), color="red", label="WT Mean")
     plt.ylim((0,ymax))
     plt.xlabel(f"{metric} bins [{unit}]")
     plt.ylabel("Count of larvae [#]")
@@ -56,8 +95,9 @@ def plot_histogram_bins(mutant_on, mutant_off, wildtype_on, wildtype_off,metric,
 
     plt.subplot(1, 2, 2)
     plt.hist(mutant_off, bins=bins, color="blue", alpha=0.5, rwidth=0.85, label="ADGRL3.1")
-    # plt.axvline(x=np.mean(mutant_off), color="blue", label="ADGRL3.1 Mean")
+    plt.axvline(x=np.mean(mutant_off), color="blue", label="ADGRL3.1 Mean")
     plt.hist(wildtype_off, bins=bins, color="red", alpha=0.5, rwidth=0.85, label="WT")
+    plt.axvline(x=np.mean(wildtype_off), color="red", linestyle="dashed", label="WT Mean")
     plt.axvline(x=np.mean(wildtype_off + mutant_off), color="k", label="Mean")
     plt.ylim((0,ymax))
     plt.xlabel(f"{metric} bins [{unit}]")
@@ -184,9 +224,20 @@ plot_histogram_bins(sc_mutant_on,sc_mutant_off,sc_wildtype_on,sc_wildtype_off,"S
 plot_histogram_bins(sd_mutant_on,sd_mutant_off,sd_wildtype_on,sd_wildtype_off,"Avg. sprint duration",45,50,"s")
 plot_histogram_bins(tm_mutant_on,tm_mutant_off,tm_wildtype_on,tm_wildtype_off,"Time moving",250,50,"s")
 
-
-
 recording_count = 0
+
+predictions_ec_on = []
+predictions_ec_off = []
+predictions_sc_on = []
+predictions_sc_off = []
+predictions_sd_on = []
+predictions_sd_off = []
+predictions_tm_on = []
+predictions_tm_off = []
+
+actual = []
+actual_sd_on = []
+actual_sd_off = []
 
 for date_i, date in enumerate(DATES):
     for exp_i, exp in enumerate(EXPERIMENTS[date_i]):
@@ -204,8 +255,10 @@ for date_i, date in enumerate(DATES):
 
                     if (mutants_on_left == True and num < 7) or (mutants_on_left == False and num >= 7):
                         is_mutant = True
+                        actual.append("ADGRL")
                     else:
                         is_mutant = False
+                        actual.append("WT")
 
                     with open(BASE_PATH + date + f"/ex{exp}/compartments/{COMP_ID}.csv", mode="r") as file:
                         csvFile = csv.reader(file)
@@ -215,12 +268,15 @@ for date_i, date in enumerate(DATES):
                         event_count_on = len([time for time in timestamps if time < SPIKE_TIME*1000000])
                         event_count_off = len([time for time in timestamps if time >= (SPIKE_TIME+1)*1000000])
 
-                        if is_mutant:
-                            ec_mutant_on.append(event_count_on)
-                            ec_mutant_off.append(event_count_off)
+                        if event_count_on >= ec_threshold_on:
+                            predictions_ec_on.append("ADGRL")
                         else:
-                            ec_wildtype_on.append(event_count_on)
-                            ec_wildtype_off.append(event_count_off)
+                            predictions_ec_on.append("WT")
+                        if event_count_off >= ec_threshold_off:
+                            predictions_ec_off.append("ADGRL")
+                        else:
+                            predictions_ec_off.append("WT")
+
 
                     with open(BASE_PATH2 + date + f"/ex{exp}/compartments/{COMP_ID}.csv", mode="r") as file:
                         csvFile = csv.reader(file)
@@ -245,20 +301,65 @@ for date_i, date in enumerate(DATES):
                         time_moving_on = sum(durations_on)/1000000
                         time_moving_off = sum(durations_off)/1000000
 
-                        if is_mutant:
-                            sc_mutant_on.append(sprint_count_on)
-                            sc_mutant_off.append(sprint_count_off)
-                            sd_mutant_on.append(sprint_dur_on)
-                            sd_mutant_off.append(sprint_dur_off)
-                            tm_mutant_on.append(time_moving_on)
-                            tm_mutant_off.append(time_moving_off)
+
+                        if sprint_count_on >= sc_threshold_on:
+                            predictions_sc_on.append("ADGRL")
                         else:
-                            sc_wildtype_on.append(sprint_count_on)
-                            sc_wildtype_off.append(sprint_count_off)
-                            sd_wildtype_on.append(sprint_dur_on)
-                            sd_wildtype_off.append(sprint_dur_off)
-                            tm_wildtype_on.append(time_moving_on)
-                            tm_wildtype_off.append(time_moving_off)
+                            predictions_sc_on.append("WT")
+                        if sprint_count_off >= sc_threshold_off:
+                            predictions_sc_off.append("ADGRL")
+                        else:
+                            predictions_sc_off.append("WT")
+                        if time_moving_on >= tm_threshold_on:
+                            predictions_tm_on.append("ADGRL")
+                        else:
+                            predictions_tm_on.append("WT")
+                        if time_moving_off >= tm_threshold_off:
+                            predictions_tm_off.append("ADGRL")
+                        else:
+                            predictions_tm_off.append("WT")
+
+                        if not np.isnan(sprint_dur_on) and sprint_dur_on != 0:
+                            if is_mutant:
+                                actual_sd_on.append("ADGRL")
+                            else:
+                                actual_sd_on.append("WT")
+
+                            # make prediction
+                            if sprint_dur_on >= sd_threshold_on:
+                                predictions_sd_on.append("ADGRL")
+                            else:
+                                predictions_sd_on.append("WT")
+
+                        if not np.isnan(sprint_dur_off) or sprint_dur_off != 0:
+                            if is_mutant:
+                                actual_sd_off.append("ADGRL")
+                            else:
+                                actual_sd_off.append("WT")
+
+                            # make prediction
+                            if sprint_dur_off >= sd_threshold_off:
+                                predictions_sd_off.append("ADGRL")
+                            else:
+                                predictions_sd_off.append("WT")
                 
                 comp_count += 1
         recording_count += 1
+
+print(len(actual))
+print(len(predictions_ec_on))
+print(len(predictions_ec_off))
+print(len(predictions_sc_on ))
+print(len(predictions_sc_off))
+print(len(predictions_tm_on ))
+print(len(predictions_tm_off))
+print(len(actual_sd_on))
+print(len(predictions_sd_on ))
+print(len(actual_sd_off))
+print(len(predictions_sd_off))
+
+ec_on_res, counts = result(actual, predictions_ec_on)
+prec, rec, acc = confusion_matrix(counts)
+print(f"{'Precision:':>10} {prec}")
+print(f"{'Recall:':>10} {rec}")
+print(f"{'Accuracy:':>10} {acc}")
