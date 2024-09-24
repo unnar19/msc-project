@@ -70,9 +70,6 @@ for date_i, date in enumerate(DATES):
 
                     compartment_count += 1
 
-
-
-
             # Time_moving_array.append(time_moving/(compartment_count))
             Time_moving_array_on.append(time_moving_on/compartment_count)
             Time_moving_array_off.append(time_moving_off/compartment_count)

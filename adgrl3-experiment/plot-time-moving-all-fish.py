@@ -113,7 +113,7 @@ plt.grid(axis="y")
 plt.vlines(SPIKE_TIME, 0, ymax*1.1, "k")
 time_step_axis = np.linspace(0,357,100000)
 plt.fill_between(time_step_axis, 0, ymax*1.1, where=(np.array(time_step_axis) >= SPIKE_TIME) & (np.array(time_step_axis) <= 357), color='gray', alpha=0.2)
-plt.ylim([0, ymax*1.1])
+plt.ylim([0, ymax*0.5])
 plt.show()
 
 fig.savefig(f"graphics/graphs/plot-time-moving-all-fish.png")

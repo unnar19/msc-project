@@ -102,9 +102,6 @@ mt_avg = [0 for _ in range(BIN_COUNT)]
 wt_avg = [0 for _ in range(BIN_COUNT)]
 print(f"p-value\tSignificant")
 for bin_i in range(BIN_COUNT):
-    # _, p_value = stats.ttest_ind(np.nan_to_num(mutant_sprint_dur[bin_i]), np.nan_to_num(wildtype_sprint_dur[bin_i]))
-    # p_value_one_tailed = p_value / 2
-    # print(f"{p_value_one_tailed:.5f}\t{bool(p_value_one_tailed < 0.05)}")
     mutant_sprint_dur[bin_i] = np.array(mutant_sprint_dur[bin_i])
     mutant_sprint_dur[bin_i] = mutant_sprint_dur[bin_i][~np.isnan(mutant_sprint_dur[bin_i])]
     mutant_sprint_dur[bin_i] = mutant_sprint_dur[bin_i][np.nonzero(mutant_sprint_dur[bin_i])]
@@ -115,8 +112,11 @@ for bin_i in range(BIN_COUNT):
     wildtype_sprint_dur[bin_i] = wildtype_sprint_dur[bin_i][np.nonzero(wildtype_sprint_dur[bin_i])]
     wildtype_sprint_dur[bin_i] = list(wildtype_sprint_dur[bin_i])
 
-    _, p_value = stats.mannwhitneyu(np.nan_to_num(mutant_sprint_dur[bin_i]), np.nan_to_num(wildtype_sprint_dur[bin_i]))
-    print(f"{p_value:.5f}\t{bool(p_value < 0.05)}")
+    _, p_value = stats.ttest_ind(np.nan_to_num(mutant_sprint_dur[bin_i]), np.nan_to_num(wildtype_sprint_dur[bin_i]))
+    p_value_one_tailed = p_value / 2
+    print(f"{p_value_one_tailed:.5f}\t{bool(p_value_one_tailed < 0.05)}")
+    # _, p_value = stats.mannwhitneyu(np.nan_to_num(mutant_sprint_dur[bin_i]), np.nan_to_num(wildtype_sprint_dur[bin_i]))
+    # print(f"{p_value:.5f}\t{bool(p_value < 0.05)}")
     mt_avg[bin_i] = np.mean(np.nan_to_num(mutant_sprint_dur[bin_i]))
     wt_avg[bin_i] = np.mean(np.nan_to_num(wildtype_sprint_dur[bin_i]))
 

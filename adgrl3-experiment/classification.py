@@ -66,80 +66,94 @@ def plot_histogram_bins(mutant_on, mutant_off, wildtype_on, wildtype_off,metric,
     plt.legend()
 
     plt.tight_layout()
-    fig.savefig(f"graphics\graphs\histograms\histogram-{'-'.join(metric.lower().split())}.png")
+    # fig.savefig(f"graphics\graphs\histograms\histogram-{'-'.join(metric.lower().split())}.png")
     plt.show()
+
+N_train = int(TRAIN_RATIO * 96)
+N_test = 96 - N_train
+train_array = np.concatenate((np.ones((1,N_train)),np.zeros((1,N_test))),axis=1)[0]
+
+train_store = []
+seed = 2616854216
 
 for date_i, date in enumerate(DATES):
     for exp_i, exp in enumerate(EXPERIMENTS[date_i]):
 
         mutants_on_left = bool(MUTANTS_ON_LEFT[date_i][exp_i])
-
         comp_count = 0
 
-        for alph in ALPH_MAP:
+        np.random.seed(seed)
+
+        seed += 1
+
+        np.random.shuffle(train_array)
+        train_store.append(train_array.copy())
+
+        for a, alph in enumerate(ALPH_MAP):
             for num in range(1,13):
-                COMP_ID = f"{alph}{num}"
+                # detect if this compartment is train
+                if train_array[comp_count] == 1:
+                    COMP_ID = f"{alph}{num}"
 
-                # detect if this compartment is train or test
+                    if (mutants_on_left == True and num < 7) or (mutants_on_left == False and num >= 7):
+                        is_mutant = True
+                    else:
+                        is_mutant = False
 
+                    with open(BASE_PATH + date + f"/ex{exp}/compartments/{COMP_ID}.csv", mode="r") as file:
+                        csvFile = csv.reader(file)
+                        next(csvFile)
+
+                        timestamps = [int(row[3]) for row in csvFile]
+                        event_count_on = len([time for time in timestamps if time < SPIKE_TIME*1000000])
+                        event_count_off = len([time for time in timestamps if time >= (SPIKE_TIME+1)*1000000])
+
+                        if is_mutant:
+                            ec_mutant_on.append(event_count_on)
+                            ec_mutant_off.append(event_count_off)
+                        else:
+                            ec_wildtype_on.append(event_count_on)
+                            ec_wildtype_off.append(event_count_off)
+
+                    with open(BASE_PATH2 + date + f"/ex{exp}/compartments/{COMP_ID}.csv", mode="r") as file:
+                        csvFile = csv.reader(file)
+                        next(csvFile)
+
+                        durs  = []
+                        starts = []
+                        ends = []
+
+                        for row in csvFile:
+                            durs.append(int(row[0]))
+                            starts.append(int(row[1]))
+                            ends.append(int(row[2]))
+
+                        durations_on =  [dur for start,dur in zip(starts,durs) if start < SPIKE_TIME*1000000]
+                        durations_off = [dur for start,dur in zip(starts,durs) if start >= (SPIKE_TIME+1)*1000000]
+
+                        sprint_count_on = len(durations_on)
+                        sprint_count_off = len(durations_off)
+                        sprint_dur_on = np.mean(durations_on)/1000000
+                        sprint_dur_off = np.mean(durations_off)/1000000
+                        time_moving_on = sum(durations_on)/1000000
+                        time_moving_off = sum(durations_off)/1000000
+
+                        if is_mutant:
+                            sc_mutant_on.append(sprint_count_on)
+                            sc_mutant_off.append(sprint_count_off)
+                            sd_mutant_on.append(sprint_dur_on)
+                            sd_mutant_off.append(sprint_dur_off)
+                            tm_mutant_on.append(time_moving_on)
+                            tm_mutant_off.append(time_moving_off)
+                        else:
+                            sc_wildtype_on.append(sprint_count_on)
+                            sc_wildtype_off.append(sprint_count_off)
+                            sd_wildtype_on.append(sprint_dur_on)
+                            sd_wildtype_off.append(sprint_dur_off)
+                            tm_wildtype_on.append(time_moving_on)
+                            tm_wildtype_off.append(time_moving_off)
+                
                 comp_count += 1
-                if (mutants_on_left == True and num < 7) or (mutants_on_left == False and num >= 7):
-                    is_mutant = True
-                else:
-                    is_mutant = False
-
-                with open(BASE_PATH + date + f"/ex{exp}/compartments/{COMP_ID}.csv", mode="r") as file:
-                    csvFile = csv.reader(file)
-                    next(csvFile)
-
-                    timestamps = [int(row[3]) for row in csvFile]
-                    event_count_on = len([time for time in timestamps if time < SPIKE_TIME*1000000])
-                    event_count_off = len([time for time in timestamps if time >= (SPIKE_TIME+1)*1000000])
-
-                    if is_mutant:
-                        ec_mutant_on.append(event_count_on)
-                        ec_mutant_off.append(event_count_off)
-                    else:
-                        ec_wildtype_on.append(event_count_on)
-                        ec_wildtype_off.append(event_count_off)
-
-                with open(BASE_PATH2 + date + f"/ex{exp}/compartments/{COMP_ID}.csv", mode="r") as file:
-                    csvFile = csv.reader(file)
-                    next(csvFile)
-
-                    durs  = []
-                    starts = []
-                    ends = []
-
-                    for row in csvFile:
-                        durs.append(int(row[0]))
-                        starts.append(int(row[1]))
-                        ends.append(int(row[2]))
-
-                    durations_on =  [dur for start,dur in zip(starts,durs) if start < SPIKE_TIME*1000000]
-                    durations_off = [dur for start,dur in zip(starts,durs) if start >= (SPIKE_TIME+1)*1000000]
-
-                    sprint_count_on = len(durations_on)
-                    sprint_count_off = len(durations_off)
-                    sprint_dur_on = np.mean(durations_on)/1000000
-                    sprint_dur_off = np.mean(durations_off)/1000000
-                    time_moving_on = sum(durations_on)/1000000
-                    time_moving_off = sum(durations_off)/1000000
-
-                    if is_mutant:
-                        sc_mutant_on.append(sprint_count_on)
-                        sc_mutant_off.append(sprint_count_off)
-                        sd_mutant_on.append(sprint_dur_on)
-                        sd_mutant_off.append(sprint_dur_off)
-                        tm_mutant_on.append(time_moving_on)
-                        tm_mutant_off.append(time_moving_off)
-                    else:
-                        sc_wildtype_on.append(sprint_count_on)
-                        sc_wildtype_off.append(sprint_count_off)
-                        sd_wildtype_on.append(sprint_dur_on)
-                        sd_wildtype_off.append(sprint_dur_off)
-                        tm_wildtype_on.append(time_moving_on)
-                        tm_wildtype_off.append(time_moving_off)
 
 sd_mutant_on = np.array(sd_mutant_on)
 sd_mutant_off = np.array(sd_mutant_off)
@@ -169,3 +183,82 @@ plot_histogram_bins(ec_mutant_on,ec_mutant_off,ec_wildtype_on,ec_wildtype_off,"E
 plot_histogram_bins(sc_mutant_on,sc_mutant_off,sc_wildtype_on,sc_wildtype_off,"Sprint count",160,50,"#")
 plot_histogram_bins(sd_mutant_on,sd_mutant_off,sd_wildtype_on,sd_wildtype_off,"Avg. sprint duration",45,50,"s")
 plot_histogram_bins(tm_mutant_on,tm_mutant_off,tm_wildtype_on,tm_wildtype_off,"Time moving",250,50,"s")
+
+
+
+recording_count = 0
+
+for date_i, date in enumerate(DATES):
+    for exp_i, exp in enumerate(EXPERIMENTS[date_i]):
+
+        mutants_on_left = bool(MUTANTS_ON_LEFT[date_i][exp_i])
+        comp_count = 0
+
+        train_store
+
+        for a, alph in enumerate(ALPH_MAP):
+            for num in range(1,13):
+                # detect if this compartment is test
+                if train_store[recording_count][comp_count] == 0:
+                    COMP_ID = f"{alph}{num}"
+
+                    if (mutants_on_left == True and num < 7) or (mutants_on_left == False and num >= 7):
+                        is_mutant = True
+                    else:
+                        is_mutant = False
+
+                    with open(BASE_PATH + date + f"/ex{exp}/compartments/{COMP_ID}.csv", mode="r") as file:
+                        csvFile = csv.reader(file)
+                        next(csvFile)
+
+                        timestamps = [int(row[3]) for row in csvFile]
+                        event_count_on = len([time for time in timestamps if time < SPIKE_TIME*1000000])
+                        event_count_off = len([time for time in timestamps if time >= (SPIKE_TIME+1)*1000000])
+
+                        if is_mutant:
+                            ec_mutant_on.append(event_count_on)
+                            ec_mutant_off.append(event_count_off)
+                        else:
+                            ec_wildtype_on.append(event_count_on)
+                            ec_wildtype_off.append(event_count_off)
+
+                    with open(BASE_PATH2 + date + f"/ex{exp}/compartments/{COMP_ID}.csv", mode="r") as file:
+                        csvFile = csv.reader(file)
+                        next(csvFile)
+
+                        durs  = []
+                        starts = []
+                        ends = []
+
+                        for row in csvFile:
+                            durs.append(int(row[0]))
+                            starts.append(int(row[1]))
+                            ends.append(int(row[2]))
+
+                        durations_on =  [dur for start,dur in zip(starts,durs) if start < SPIKE_TIME*1000000]
+                        durations_off = [dur for start,dur in zip(starts,durs) if start >= (SPIKE_TIME+1)*1000000]
+
+                        sprint_count_on = len(durations_on)
+                        sprint_count_off = len(durations_off)
+                        sprint_dur_on = np.mean(durations_on)/1000000
+                        sprint_dur_off = np.mean(durations_off)/1000000
+                        time_moving_on = sum(durations_on)/1000000
+                        time_moving_off = sum(durations_off)/1000000
+
+                        if is_mutant:
+                            sc_mutant_on.append(sprint_count_on)
+                            sc_mutant_off.append(sprint_count_off)
+                            sd_mutant_on.append(sprint_dur_on)
+                            sd_mutant_off.append(sprint_dur_off)
+                            tm_mutant_on.append(time_moving_on)
+                            tm_mutant_off.append(time_moving_off)
+                        else:
+                            sc_wildtype_on.append(sprint_count_on)
+                            sc_wildtype_off.append(sprint_count_off)
+                            sd_wildtype_on.append(sprint_dur_on)
+                            sd_wildtype_off.append(sprint_dur_off)
+                            tm_wildtype_on.append(time_moving_on)
+                            tm_wildtype_off.append(time_moving_off)
+                
+                comp_count += 1
+        recording_count += 1
