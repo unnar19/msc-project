@@ -71,13 +71,21 @@ for date_i, date in enumerate(DATES):
                             header = False
 
                     temp_time_axis = [t/1000 - ACC_TIME_MS/2000 + 0.6*(ACC_TIME_MS/2000 * uniform(-1.0,1.0)) for t in bin_stop_time]
+
                     
                     mean_sprint_dur = []
                     for i in range(BIN_COUNT):
                         mean_sprint_dur.append(np.mean(sprint_durations[i]))
 
                     mean_sprint_dur = np.nan_to_num(mean_sprint_dur)
-                    plt.scatter(temp_time_axis, mean_sprint_dur, color=c, marker=".", alpha=0.1)
+
+                    temp_time_axis = np.array(temp_time_axis)
+                    mean_sprint_dur = np.array(mean_sprint_dur)
+
+                    temp1 = temp_time_axis[np.nonzero(mean_sprint_dur)]
+                    temp2 = mean_sprint_dur[np.nonzero(mean_sprint_dur)]
+
+                    plt.scatter(temp1, temp2, color=c, marker=".", alpha=0.1)
 
                     if is_mutant:
                         #mutant_sprint_count += sprint_durations
@@ -97,6 +105,16 @@ for bin_i in range(BIN_COUNT):
     # _, p_value = stats.ttest_ind(np.nan_to_num(mutant_sprint_dur[bin_i]), np.nan_to_num(wildtype_sprint_dur[bin_i]))
     # p_value_one_tailed = p_value / 2
     # print(f"{p_value_one_tailed:.5f}\t{bool(p_value_one_tailed < 0.05)}")
+    mutant_sprint_dur[bin_i] = np.array(mutant_sprint_dur[bin_i])
+    mutant_sprint_dur[bin_i] = mutant_sprint_dur[bin_i][~np.isnan(mutant_sprint_dur[bin_i])]
+    mutant_sprint_dur[bin_i] = mutant_sprint_dur[bin_i][np.nonzero(mutant_sprint_dur[bin_i])]
+    mutant_sprint_dur[bin_i] = list(mutant_sprint_dur[bin_i])
+
+    wildtype_sprint_dur[bin_i] = np.array(wildtype_sprint_dur[bin_i])
+    wildtype_sprint_dur[bin_i] = wildtype_sprint_dur[bin_i][~np.isnan(wildtype_sprint_dur[bin_i])]
+    wildtype_sprint_dur[bin_i] = wildtype_sprint_dur[bin_i][np.nonzero(wildtype_sprint_dur[bin_i])]
+    wildtype_sprint_dur[bin_i] = list(wildtype_sprint_dur[bin_i])
+
     _, p_value = stats.mannwhitneyu(np.nan_to_num(mutant_sprint_dur[bin_i]), np.nan_to_num(wildtype_sprint_dur[bin_i]))
     print(f"{p_value:.5f}\t{bool(p_value < 0.05)}")
     mt_avg[bin_i] = np.mean(np.nan_to_num(mutant_sprint_dur[bin_i]))
@@ -138,11 +156,17 @@ plt.figure(figsize=(10, 8))
 
 plt.subplot(1, 2, 1)
 stats.probplot(mutant_on, dist="norm", plot=plt)
-plt.title(f"Q-Q Plot for Mutant Data (Lights on)")
+plt.gca().get_lines()[0].set_color('blue')
+plt.gca().get_lines()[1].set_color('k')
+plt.title(f"Mean sprint duration Q-Q Plot for ADGRL3.1 (Lights on)")
+fig.savefig(f"graphics/graphs/qqplots/sd_qq_adgrl_on.png")
 
 plt.subplot(1, 2, 2)
 stats.probplot(wildtype_on, dist="norm", plot=plt)
-plt.title(f"Q-Q Plot for Wildtype Data (Lights on)")
+plt.gca().get_lines()[0].set_color('red')
+plt.gca().get_lines()[1].set_color('k')
+plt.title(f"Mean sprint duration Q-Q Plot for WT (Lights on)")
+fig.savefig(f"graphics/graphs/qqplots/sd_qq_wt_on.png")
 
 plt.tight_layout()
 plt.show()
@@ -153,11 +177,17 @@ plt.figure(figsize=(10, 8))
 
 plt.subplot(1, 2, 1)
 stats.probplot(mutant_off, dist="norm", plot=plt)
-plt.title(f"Q-Q Plot for Mutant Data  (Lights off)")
+plt.gca().get_lines()[0].set_color('blue')
+plt.gca().get_lines()[1].set_color('k')
+plt.title(f"Mean sprint duration Q-Q Plot for ADGRL3.1 (Lights off)")
+fig.savefig(f"graphics/graphs/qqplots/sd_qq_adgrl_off.png")
 
 plt.subplot(1, 2, 2)
 stats.probplot(wildtype_off, dist="norm", plot=plt)
-plt.title(f"Q-Q Plot for Wildtype Data (Lights off)")
+plt.gca().get_lines()[0].set_color('red')
+plt.gca().get_lines()[1].set_color('k')
+plt.title(f"Mean sprint duration Q-Q Plot for WT (Lights off)")
+fig.savefig(f"graphics/graphs/qqplots/sd_qq_wt_off.png")
 
 plt.tight_layout()
 plt.show()
