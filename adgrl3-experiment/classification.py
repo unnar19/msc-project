@@ -14,25 +14,6 @@ MUTANTS_ON_LEFT = [[1,0],[0,1,0,1]]
 WHOLE_TIME = 357
 SPIKE_TIME = 178
 
-TRAIN_RATIO = 0.85
-
-ec_mutant_on = []
-ec_mutant_off = []
-ec_wildtype_on = []
-ec_wildtype_off = []
-sc_mutant_on = []
-sc_mutant_off = []
-sc_wildtype_on = []
-sc_wildtype_off = []
-sd_mutant_on = []
-sd_mutant_off = []
-sd_wildtype_on = []
-sd_wildtype_off = []
-tm_mutant_on = []
-tm_mutant_off = []
-tm_wildtype_on = []
-tm_wildtype_off = []
-
 def result(actual, prediction):
     """
     pred   act
@@ -108,6 +89,27 @@ def plot_histogram_bins(mutant_on, mutant_off, wildtype_on, wildtype_off,metric,
     plt.tight_layout()
     # fig.savefig(f"graphics\graphs\histograms\histogram-{'-'.join(metric.lower().split())}.png")
     plt.show()
+
+
+TRAIN_RATIO = 0.85
+
+ec_mutant_on = []
+ec_mutant_off = []
+ec_wildtype_on = []
+ec_wildtype_off = []
+sc_mutant_on = []
+sc_mutant_off = []
+sc_wildtype_on = []
+sc_wildtype_off = []
+sd_mutant_on = []
+sd_mutant_off = []
+sd_wildtype_on = []
+sd_wildtype_off = []
+tm_mutant_on = []
+tm_mutant_off = []
+tm_wildtype_on = []
+tm_wildtype_off = []
+
 
 N_train = int(TRAIN_RATIO * 96)
 N_test = 96 - N_train
@@ -345,18 +347,6 @@ for date_i, date in enumerate(DATES):
                 
                 comp_count += 1
         recording_count += 1
-
-print(len(actual))
-print(len(predictions_ec_on))
-print(len(predictions_ec_off))
-print(len(predictions_sc_on ))
-print(len(predictions_sc_off))
-print(len(predictions_tm_on ))
-print(len(predictions_tm_off))
-print(len(actual_sd_on))
-print(len(predictions_sd_on ))
-print(len(actual_sd_off))
-print(len(predictions_sd_off))
 
 ec_on_res, counts = result(actual, predictions_ec_on)
 prec, rec, acc = confusion_matrix(counts)
