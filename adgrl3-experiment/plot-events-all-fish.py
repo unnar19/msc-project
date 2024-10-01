@@ -27,7 +27,7 @@ mutant_all_events = [[] for _ in range(BIN_COUNT)]
 wildtype_all_events = [[] for _ in range(BIN_COUNT)]
 
 ymax = 0
-fig = plt.figure(figsize=(8, 4))
+fig = plt.figure(figsize=(7, 4))
 
 for date_i, date in enumerate(DATES):
     for exp_i, exp in enumerate(EXPERIMENTS[date_i]):
@@ -136,7 +136,7 @@ wildtype2 = Line2D([0], [0], marker=".", linestyle="none", color='r', alpha=0.2)
 black = Line2D([0], [0], color='k')
 
 plt.title("Event count over time for all fish with accumulation time ~30s")
-plt.legend([(mutant1,mutant2), (wildtype1,wildtype2), black] ,["adgrl3.1","WT","Light off"],loc="upper right")
+plt.legend([(mutant1,mutant2), (wildtype1,wildtype2), black] ,["$\it{adgrl3.1}$ mutants","wildtype","Light off"],loc="upper right")
 plt.xlim([0,357])
 plt.ylabel("Event count [#]")
 plt.xlabel("Time [s]")
@@ -156,40 +156,62 @@ mutant_off = sum(mutant_all_events[6:], [])
 wildtype_on  = sum(wildtype_all_events[:6], [])
 wildtype_off = sum(wildtype_all_events[6:], [])
 
-fig1 = plt.figure(figsize=(10, 8))
 
-plt.subplot(1, 2, 1)
-stats.probplot(mutant_on, dist="norm", plot=plt)
+fig1 = plt.figure(figsize=(5, 4))
+plt.rcParams['font.size'] = 16
+plt.grid(axis="y")
+stats.probplot(np.array(mutant_on)/1000, dist="norm", plot=plt)
+plt.ylabel("Ordered Values [thousands]      ")
 plt.gca().get_lines()[0].set_color('blue')
 plt.gca().get_lines()[1].set_color('k')
-plt.title(f"Event count Q-Q Plot for ADGRL3.1 (Lights on)")
+plt.title("EC Q-Q $\it{adgrl3.1}$ on")
+plt.legend(["$\it{adgrl3.1}$ mutants"])
+plt.tight_layout()
+fig1.savefig(f"graphics/graphs/qqplots/ec_qq_on_mt.png")
+plt.show()
 
-plt.subplot(1, 2, 2)
-stats.probplot(wildtype_on, dist="norm", plot=plt)
+fig2 = plt.figure(figsize=(5, 4))
+plt.rcParams['font.size'] = 16
+plt.grid(axis="y")
+stats.probplot(np.array(wildtype_on)/1000, dist="norm", plot=plt)
+plt.ylabel("Ordered Values [thousands]      ")
 plt.gca().get_lines()[0].set_color('red')
 plt.gca().get_lines()[1].set_color('k')
-plt.title(f"Event count Q-Q Plot for WT (Lights on)")
-fig1.savefig(f"graphics/graphs/qqplots/ec_qq_on.png")
-
+plt.title(f"EC Q-Q wildtype on")
+plt.legend(["wildtype"])
 plt.tight_layout()
+fig2.savefig(f"graphics/graphs/qqplots/ec_qq_on_wt.png")
 plt.show()
 
 
 
-fig2 = plt.figure(figsize=(10, 8))
-
-plt.subplot(1, 2, 1)
-stats.probplot(mutant_off, dist="norm", plot=plt)
+fig3 = plt.figure(figsize=(5, 4))
+ax = plt.axes()
+ax.set_facecolor('#e6e6e6')
+plt.rcParams['font.size'] = 16
+plt.grid(axis="y")
+stats.probplot(np.array(mutant_off)/1000, dist="norm", plot=plt)
+plt.ylabel("Ordered Values [thousands]      ")
 plt.gca().get_lines()[0].set_color('blue')
 plt.gca().get_lines()[1].set_color('k')
-plt.title(f"Event count Q-Q Plot for ADGRL3.1 (Lights off)")
+plt.title("EC Q-Q $\it{adgrl3.1}$ off")
+plt.legend(["$\it{adgrl3.1}$ mutants"])
+plt.tight_layout()
+fig3.savefig(f"graphics/graphs/qqplots/ec_qq_off_mt.png")
+plt.show()
 
-plt.subplot(1, 2, 2)
-stats.probplot(wildtype_off, dist="norm", plot=plt)
+
+fig4 = plt.figure(figsize=(5, 4))
+ax = plt.axes()
+ax.set_facecolor('#e6e6e6')
+plt.rcParams['font.size'] = 16
+plt.grid(axis="y")
+stats.probplot(np.array(wildtype_off)/1000, dist="norm", plot=plt)
+plt.ylabel("Ordered Values [thousands]      ")
 plt.gca().get_lines()[0].set_color('red')
 plt.gca().get_lines()[1].set_color('k')
-plt.title(f"Event count Q-Q Plot for WT (Lights off")
-fig2.savefig(f"graphics/graphs/qqplots/ec_qq_off.png")
-
+plt.title(f"EC Q-Q wildtype off")
+plt.legend(["wildtype"])
 plt.tight_layout()
+fig4.savefig(f"graphics/graphs/qqplots/ec_qq_off_wt.png")
 plt.show()

@@ -33,7 +33,7 @@ for date_i, date in enumerate(DATES):
         new_average = int(sum(average_time_diff) / len(average_time_diff))
         print(f"{exp_i}  \t{new_average:.0f}")
 
-
+quit()
 count = 0
 for date_i, date in enumerate(DATES):
     for exp_i in range(1,EXPERIMENTS[date_i]+1):

@@ -42,17 +42,7 @@ for exp_i in range(1,6):
     SNR = signal/noise
     PNR = (e_on + n_on)/(e_off + n_off)
 
-    print(f"\n{e_on:.0f} & {e_off:.0f} & {n_on:.0f} & {n_off:.0f}")
-
-    print(f"\ne on  {int(round(e_on,0))}")
-    print(f"e off {int(round(e_off,0))}")
-    print(f"n on  {int(round(n_on,0))}")
-    print(f"n off {int(round(n_off,0))}\n")
-    
-    print(f"SNR = {SNR:.5f}")
-    print(f"PNR = {PNR:.5f}")
-
-    fig = plt.figure(figsize=(6, 7))
+    fig = plt.figure(figsize=(4, 4))
     events = plt.boxplot(data, positions=[1,2,4,5], widths=0.35, patch_artist=True)
 
     for box, color in zip(events['boxes'], colors):

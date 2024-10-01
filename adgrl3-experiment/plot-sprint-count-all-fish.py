@@ -32,7 +32,7 @@ wildtype_all_sprints = [[] for _ in range(BIN_COUNT)]
 ymax = 0
 divider = 0
 
-fig = plt.figure(figsize=(8, 4))
+fig = plt.figure(figsize=(7, 4))
 
 for date_i, date in enumerate(DATES):
     for exp_i, exp in enumerate(EXPERIMENTS[date_i]):
@@ -104,7 +104,7 @@ wildtype1 = Line2D([0], [0], color='r')
 wildtype2 = Line2D([0], [0], marker=".", linestyle="none", color='r', alpha=0.2)
 black = Line2D([0], [0], color='k')
 plt.title("Sprint count for all fish with accumulation time ~30s")
-plt.legend([(mutant1,mutant2), (wildtype1,wildtype2), black] ,["adgrl3.1","WT","Light off"])
+plt.legend([(mutant1,mutant2), (wildtype1,wildtype2), black] ,["$\it{adgrl3.1}$ mutants","WT","Light off"],loc='upper right')
 plt.xlim([0,357])
 plt.ylabel("Sprint count [#]")
 plt.xlabel("Time [s]")
@@ -114,9 +114,9 @@ plt.vlines(SPIKE_TIME, 0, ymax*1.1, "k")
 time_step_axis = np.linspace(0,357,100000)
 plt.fill_between(time_step_axis, 0, ymax*1.1, where=(np.array(time_step_axis) >= SPIKE_TIME) & (np.array(time_step_axis) <= 357), color='gray', alpha=0.2)
 plt.ylim([0, ymax*0.6])
+fig.savefig(f"graphics/graphs/plot-sprint-count-all-fish.png")
 plt.show()
 
-fig.savefig(f"graphics/graphs/plot-sprint-count-all-fish.png")
 
 mutant_on  = sum(mutant_all_sprints[:6], [])
 mutant_off = sum(mutant_all_sprints[6:], [])
@@ -125,40 +125,55 @@ wildtype_on  = sum(wildtype_all_sprints[:6], [])
 wildtype_off = sum(wildtype_all_sprints[6:], [])
 
 
-fig1 = plt.figure(figsize=(10, 8))
-
-plt.subplot(1, 2, 1)
+fig1 = plt.figure(figsize=(5, 4))
+plt.rcParams['font.size'] = 16
+plt.grid(axis="y")
 stats.probplot(mutant_on, dist="norm", plot=plt)
 plt.gca().get_lines()[0].set_color('blue')
 plt.gca().get_lines()[1].set_color('k')
-plt.title(f"Sprint count Q-Q Plot for ADGRL3.1 (Lights on)")
+plt.title("SC Q-Q $\it{adgrl3.1}$ on")
+plt.legend(["$\it{adgrl3.1}$ mutants"],loc='upper left')
+plt.tight_layout()
+fig1.savefig(f"graphics/graphs/qqplots/sc_qq_on_mt.png")
+plt.show()
 
-plt.subplot(1, 2, 2)
+fig2 = plt.figure(figsize=(5, 4))
+plt.rcParams['font.size'] = 16
+plt.grid(axis="y")
 stats.probplot(wildtype_on, dist="norm", plot=plt)
 plt.gca().get_lines()[0].set_color('red')
 plt.gca().get_lines()[1].set_color('k')
-plt.title(f"Sprint count Q-Q Plot for WT (Lights on)")
-fig1.savefig(f"graphics/graphs/qqplots/sc_qq_on.png")
-
+plt.title(f"SC Q-Q wildtype on")
+plt.legend(["wildtype"],loc='upper left')
 plt.tight_layout()
+fig2.savefig(f"graphics/graphs/qqplots/sc_qq_on_wt.png")
 plt.show()
 
-
-
-fig2 = plt.figure(figsize=(10, 8))
-
-plt.subplot(1, 2, 1)
+fig3 = plt.figure(figsize=(5, 4))
+ax = plt.axes()
+ax.set_facecolor('#e6e6e6')
+plt.rcParams['font.size'] = 16
+plt.grid(axis="y")
 stats.probplot(mutant_off, dist="norm", plot=plt)
 plt.gca().get_lines()[0].set_color('blue')
 plt.gca().get_lines()[1].set_color('k')
-plt.title(f"Sprint count Q-Q Plot for ADGRL3.1 (Lights off)")
+plt.title("SC Q-Q $\it{adgrl3.1}$ off")
+plt.legend(["$\it{adgrl3.1}$ mutants"],loc='upper left')
+plt.tight_layout()
+fig3.savefig(f"graphics/graphs/qqplots/sc_qq_off_mt.png")
+plt.show()
 
-plt.subplot(1, 2, 2)
+
+fig4 = plt.figure(figsize=(5, 4))
+ax = plt.axes()
+ax.set_facecolor('#e6e6e6')
+plt.rcParams['font.size'] = 16
+plt.grid(axis="y")
 stats.probplot(wildtype_off, dist="norm", plot=plt)
 plt.gca().get_lines()[0].set_color('red')
 plt.gca().get_lines()[1].set_color('k')
-plt.title(f"Sprint count Q-Q Plot for WT (Lights off)")
-fig2.savefig(f"graphics/graphs/qqplots/sc_qq_off.png")
-
+plt.title(f"SC Q-Q wildtype off")
+plt.legend(["wildtype"],loc='upper left')
 plt.tight_layout()
+fig4.savefig(f"graphics/graphs/qqplots/sc_qq_off_wt.png")
 plt.show()

@@ -31,7 +31,7 @@ for exp_i in range(1,6):
     data.append(noise_off)
 
 
-    fig = plt.figure(figsize=(6, 7))
+    fig = plt.figure(figsize=(4, 4))
     events = plt.boxplot(data, positions=[1,2,4,5], widths=0.35, patch_artist=True)
 
     for box, color in zip(events['boxes'], colors):
@@ -47,4 +47,4 @@ for exp_i in range(1,6):
     plt.axis("tight")
     plt.grid(axis="y")
     plt.show()
-    #fig.savefig(f"graphics/box-plot-all-events-ex{exp_i}.png")
+    fig.savefig(f"graphics/full-frame/box-plot-all-events-ex{exp_i}.png")

@@ -74,20 +74,24 @@ while SPRINT_THRESHOLD_US <= max_threshold:
 
     SPRINT_THRESHOLD_US *= factor   
 
-plt.plot(Threshold_array, P_FP_array)
+fig1 = plt.figure(figsize=(7, 4))
+plt.plot(Threshold_array, P_FP_array,"o-")
 plt.xlabel("Threshold [µs]")
 plt.ylabel("Probability")
 plt.legend(["P(FP)"])
 plt.title("ADGRL3.1 & WT - Sensitivity analysis of counting false positive sprints")
-plt.savefig("graphics\graphs\sensitivity\PFP.png")
+plt.grid(axis="y")
+fig1.savefig("graphics\graphs\sensitivity\PFP.png")
 plt.show()
 
-plt.plot(Threshold_array, P_FP20_array)
+fig2 = plt.figure(figsize=(7, 4))
+plt.plot(Threshold_array, P_FP20_array,"o-")
 plt.xlabel("Threshold [µs]")
 plt.ylabel("Probability")
 plt.legend(["P(FP)$^{"+ f"{MIN_EVENTS_PER_SPRINT}" +"}$"])
 plt.title("ADGRL3.1 & WT - Sensitivity analysis of counting false positive sprints")
-plt.savefig("graphics\graphs\sensitivity\PFP20.png")
+plt.grid(axis="y")
+fig2.savefig("graphics\graphs\sensitivity\PFP20.png")
 plt.show()
 
 

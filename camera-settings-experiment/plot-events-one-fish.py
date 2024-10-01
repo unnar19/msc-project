@@ -50,18 +50,20 @@ with open(BASE_PATH2 + f"ex{EXPERIMENT}/compartments/{COMP_ID}.csv", mode='r') a
         else:
             header = False
 
-fig = plt.figure(figsize=(8, 4))
-plt.plot(time_axis, event_on, color=COLORS[0])
-plt.plot(time_axis, event_off, color=COLORS[1])
+fig = plt.figure(figsize=(7, 4))
+plt.axvline(x=59.5, color="k", label="Light Off")
+plt.plot(time_axis, event_on, color=COLORS[0], label="Positive")
+plt.plot(time_axis, event_off, color=COLORS[1], label="Negative")
+plt.fill_between([59.5 ,200], -10000, 10000, color='gray', alpha=0.2)
+plt.axis([-5, 3*60+5, -1100, 350])
 
 
 #plt.yticks(plt.yticks()[0], [int(tick/1000) for tick in plt.yticks()[0]])
 plt.ylim(bottom=0)
-plt.title(f"Events in experiment {EXPERIMENT} over time for fish {COMP_ID} (Events sampled at {ACC_TIME_MS}ms)")
+# plt.title(f"Events in experiment {EXPERIMENT} over time for fish {COMP_ID} (Events sampled at {ACC_TIME_MS}ms)")
 plt.ylabel("Events [Ev]")
 plt.xlabel("Time [s]")
-plt.axis("tight")
-plt.legend(["Positive","Negative"])
+plt.legend()
 plt.grid(axis="y")
 plt.show()
 #fig.savefig(f"graphics/plot-one-fish-ex{EXPERIMENT}-{COMP_ID.lower()}.png")

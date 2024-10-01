@@ -400,8 +400,7 @@ for percent in range(10,100,10):
         counts_array_tm_off.append(counts_tm_off)
         counts_array_sd_on.append(counts_sd_on)
         counts_array_sd_off.append(counts_sd_off)
-        print(f"{loop_iteration+1} ",end="")
-
+        print(f"{loop_iteration+1}",end=" ", flush=True)
 
     average_results("Event Count Lights ON",counts_array_ec_on)
     average_results("Event Count Lights OFF",counts_array_ec_off)
