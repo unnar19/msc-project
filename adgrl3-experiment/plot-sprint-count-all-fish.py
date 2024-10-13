@@ -17,6 +17,23 @@ WHOLE_TIME = 357
 SPIKE_TIME = 178
 BIN_COUNT = 12
 
+def split_event_list(all_events_list):
+    result_on = [a+b+c+d+e+f for a,b,c,d,e,f in zip(all_events_list[0],
+                                                all_events_list[1],
+                                                all_events_list[2],
+                                                all_events_list[3],
+                                                all_events_list[4],
+                                                all_events_list[5])]
+
+    result_off = [a+b+c+d+e+f for a,b,c,d,e,f in zip(all_events_list[6],
+                                                    all_events_list[7],
+                                                    all_events_list[8],
+                                                    all_events_list[9],
+                                                    all_events_list[10],
+                                                    all_events_list[11])]
+    return result_on, result_off
+
+
 ACC_TIME_MS = 1000*WHOLE_TIME/BIN_COUNT
 
 bin_stop_time = np.arange(ACC_TIME_MS, 1000*WHOLE_TIME+ACC_TIME_MS, ACC_TIME_MS)
@@ -86,14 +103,27 @@ for date_i, date in enumerate(DATES):
                 if highest > ymax:
                     ymax = highest
 
+mt_on, mt_off = split_event_list(mutant_all_sprints)
+wt_on, wt_off = split_event_list(wildtype_all_sprints)
+
+print(f"Non parametric (Not normal distribution)")
 print(f"p-value\tSignificant")
-for bin_i in range(BIN_COUNT):
-    # _, p_value = stats.ttest_ind(mutant_all_sprints[bin_i], wildtype_all_sprints[bin_i])
-    # p_value_one_tailed = p_value / 2
-    # print(f"{p_value_one_tailed:.5f}\t{bool(p_value_one_tailed < 0.05)}")
-    _, p_value = stats.mannwhitneyu(mutant_all_sprints[bin_i], wildtype_all_sprints[bin_i])
-    print(f"{p_value:.5f}\t{bool(p_value < 0.05)}")
+
+_, p_value = stats.mannwhitneyu(mt_on, wt_on)
+print(f"{p_value:.6f}\t{bool(p_value < 0.05)}")
+_, p_value = stats.mannwhitneyu(mt_off, wt_off)
+print(f"{p_value:.6f}\t{bool(p_value < 0.05)}")
+
+# print(f"p-value\tSignificant")
+# for bin_i in range(BIN_COUNT):
+#     # _, p_value = stats.ttest_ind(mutant_all_sprints[bin_i], wildtype_all_sprints[bin_i])
+#     # p_value_one_tailed = p_value / 2
+#     # print(f"{p_value_one_tailed:.5f}\t{bool(p_value_one_tailed < 0.05)}")
+#     _, p_value = stats.mannwhitneyu(mutant_all_sprints[bin_i], wildtype_all_sprints[bin_i])
+#     print(f"{p_value:.5f}\t{bool(p_value < 0.05)}")
     
+
+quit()
 
 plt.plot((bin_stop_time - ACC_TIME_MS/2)/1000,mutant_sprint_count/divider, color=COLORS[0])
 plt.plot((bin_stop_time - ACC_TIME_MS/2)/1000,wildtype_sprint_count/divider, color=COLORS[1])

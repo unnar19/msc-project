@@ -28,16 +28,16 @@ def result(actual, prediction):
     counts = [0,0,0,0]
 
     for act, pred in zip(actual, prediction):
-        if pred == "WT" and act == "WT":
+        if pred == "ADGRL" and act == "ADGRL":
             res.append("TP")
             counts[0] += 1
-        elif pred == "ADGRL" and act == "ADGRL":
+        elif pred == "WT" and act == "WT":
             res.append("TN")
             counts[1] += 1
-        elif pred == "WT" and act == "ADGRL":
+        elif pred == "ADGRL" and act == "WT":
             res.append("FP")
             counts[2] += 1
-        elif pred == "ADGRL" and act == "WT":
+        elif pred == "WT" and act == "ADGRL":
             res.append("FN")
             counts[3] += 1
 
@@ -47,15 +47,16 @@ def confusion_matrix(counts, print_bool):
     TP, TN, FP, FN = counts
     if print_bool:
         print(f"  {'  ':>5} Predicted")
-        print(f"A {'  ':>5} {'WT':>5} {'ADGRL':>5}")
-        print(f"c {'WT':>5} {TP:>5} {FN:>5}")
-        print(f"t {'ADGRL':>5} {FP:>5} {TN:>5}\n")
+        print(f"A {'  ':>5} {'ADGRL':>5} {'WT':>5}")
+        print(f"c {'ADGRL':>5} {TP:>5} {FN:>5}")
+        print(f"t {'WT':>5} {FP:>5} {TN:>5}\n")
 
     prec = TP/(TP + FP)
     rec =  TP/(TP + FN)
     acc = (TP + TN)/(TP + FN + TN + FP)
+    f1 = (2*TP)/(2*TP + FP + FN)
 
-    return prec, rec, acc
+    return prec, rec, acc, f1
 
     
 
@@ -101,10 +102,11 @@ def average_results(title, counts_array):
     new_counts2 = [new/total_iterations for new in new_counts]
     print(new_counts2)
     print("")
-    prec, rec, acc = confusion_matrix(new_counts2, True)
+    prec, rec, acc, f1 = confusion_matrix(new_counts2, True)
 
     print(f"{'Precision:':>10} {prec}")
     print(f"{'Recall:':>10} {rec}")
+    print(f"{'F1:':>10} {f1}")
     print(f"{'Accuracy:':>10} {acc}")
     print("-------------------------")
 

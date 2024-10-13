@@ -17,7 +17,7 @@ d = ","
 COMPARTMENTS = [f"{alph}{num}" for alph in ALPH_MAP for num in range(1,13)]
 NOISE = [f"{alph}{num}" for alph in ALPH_MAP for num in [0,13]]
 
-plt.figure(figsize=(10, 8))
+fig2 = plt.figure(figsize=(7, 4))
 
 legends = []
 line_count = 0
@@ -79,23 +79,20 @@ for date_i, date in enumerate(DATES):
 
 
         # plt.plot(Threshold_array, Time_moving_array)
-        plt.subplot(1,2,1)
-        plt.plot(Threshold_array, Time_moving_array_on)
-        plt.subplot(1,2,2)
+        # plt.plot(Threshold_array, Time_moving_array_on)
         plt.plot(Threshold_array, Time_moving_array_off)
         legends.append(f"Recording {leg[line_count]}")
         line_count += 1
 
 uh = ["on", "off"]
-for i in range(1,3):
-    plt.subplot(1,2,i)
-    plt.xlabel("Threshold [µs]")
-    plt.ylabel("Time moving [s]")
-    plt.grid()
-    plt.legend(legends)
-    plt.title(f"ADGRL3.1 & WT - Sensitivity analysis of time moving (Lights {uh[i-1]})")
 
-plt.savefig("graphics\graphs\sensitivity\sensitivity-tm.png")
+plt.xlabel("Threshold [µs]")
+plt.ylabel("Time moving [s]")
+plt.grid()
+plt.legend(legends)
+plt.title(f"ADGRL3.1 & WT - Sensitivity analysis of time moving (Lights {uh[1]})")
+
+plt.savefig("graphics\graphs\sensitivity\sensitivity-tm-off.png")
 plt.show()
 
 

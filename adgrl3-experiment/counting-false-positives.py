@@ -16,13 +16,8 @@ d = ","
 COMPARTMENTS = [f"{alph}{num}" for alph in ALPH_MAP for num in range(1,13)]
 NOISE = [f"{alph}{num}" for alph in ALPH_MAP for num in [0,13]]
 
-# This will help identify a good sprint threshold
 print("\nMeasure the probability of false positive sprint")
-
 print(f"Threshold{d}P(FP){d}P(FP)^{MIN_EVENTS_PER_SPRINT}")
-
-
-
 
 max_threshold = 30001
 factor = 1.1
@@ -30,7 +25,7 @@ factor = 1.1
 fig1 = plt.figure(figsize=(7, 4))
 plt.xlabel("Threshold [µs]")
 plt.ylabel("Probability")
-# plt.title("Sensitivity analysis of counting false positive sprints")
+plt.title("Sensitivity analysis of counting false positive sprints")
 plt.grid(axis="y")
 
 rec_num = 5

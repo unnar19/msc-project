@@ -17,12 +17,31 @@ WHOLE_TIME = 357
 SPIKE_TIME = 178
 BIN_COUNT = 12
 
+def split_event_list(all_events_list):
+    result_on = [a+b+c+d+e+f for a,b,c,d,e,f in zip(all_events_list[0],
+                                                all_events_list[1],
+                                                all_events_list[2],
+                                                all_events_list[3],
+                                                all_events_list[4],
+                                                all_events_list[5])]
+
+    result_off = [a+b+c+d+e+f for a,b,c,d,e,f in zip(all_events_list[6],
+                                                    all_events_list[7],
+                                                    all_events_list[8],
+                                                    all_events_list[9],
+                                                    all_events_list[10],
+                                                    all_events_list[11])]
+    return result_on, result_off
+
+
 ACC_TIME_MS = 1000*WHOLE_TIME/BIN_COUNT
 
 bin_stop_time = np.arange(ACC_TIME_MS, 1000*WHOLE_TIME+ACC_TIME_MS, ACC_TIME_MS)
 
-mutant_sprint_dur = [[] for _ in range(BIN_COUNT)]
-wildtype_sprint_dur = [[] for _ in range(BIN_COUNT)]
+mutant_sprint_dur_on = [[] for _ in range(BIN_COUNT)]
+mutant_sprint_dur_off = [[] for _ in range(BIN_COUNT)]
+wildtype_sprint_dur_on = [[] for _ in range(BIN_COUNT)]
+wildtype_sprint_dur_off = [[] for _ in range(BIN_COUNT)]
 
 mutant_all_sprints = [[] for _ in range(BIN_COUNT)]
 wildtype_all_sprints = [[] for _ in range(BIN_COUNT)]
@@ -30,7 +49,7 @@ wildtype_all_sprints = [[] for _ in range(BIN_COUNT)]
 ymax = 0
 divider = 0
 
-fig = plt.figure(figsize=(8, 4))
+fig = plt.figure(figsize=(7, 4))
 
 for date_i, date in enumerate(DATES):
     for exp_i, exp in enumerate(EXPERIMENTS[date_i]):
@@ -91,34 +110,84 @@ for date_i, date in enumerate(DATES):
                         #mutant_sprint_count += sprint_durations
                         #mutant_sprint_dur[bin_index].append(duration_us)
                         for bini in range(BIN_COUNT):
-                            mutant_sprint_dur[bini].append(mean_sprint_dur[bini])
+                            if bini < 6:
+                                mutant_sprint_dur_on[bini].append(mean_sprint_dur[bini])
+                            else:
+                                mutant_sprint_dur_off[bini].append(mean_sprint_dur[bini])
                     else:
                         #wildtype_sprint_count += sprint_count
                         #wildtype_sprint_dur[bin_index].append(duration_us)
                         for bini in range(BIN_COUNT):
-                            wildtype_sprint_dur[bini].append(mean_sprint_dur[bini])
+                            if bini < 6:
+                                wildtype_sprint_dur_on[bini].append(mean_sprint_dur[bini])
+                            else:
+                                wildtype_sprint_dur_off[bini].append(mean_sprint_dur[bini])
 
 mt_avg = [0 for _ in range(BIN_COUNT)]
 wt_avg = [0 for _ in range(BIN_COUNT)]
 print(f"p-value\tSignificant")
 for bin_i in range(BIN_COUNT):
-    mutant_sprint_dur[bin_i] = np.array(mutant_sprint_dur[bin_i])
-    mutant_sprint_dur[bin_i] = mutant_sprint_dur[bin_i][~np.isnan(mutant_sprint_dur[bin_i])]
-    mutant_sprint_dur[bin_i] = mutant_sprint_dur[bin_i][np.nonzero(mutant_sprint_dur[bin_i])]
-    mutant_sprint_dur[bin_i] = list(mutant_sprint_dur[bin_i])
+    
+    if bini < 6:
+        mutant_sprint_dur_on[bin_i] = np.array(mutant_sprint_dur_on[bin_i])
+        mutant_sprint_dur_on[bin_i] = mutant_sprint_dur_on[bin_i][~np.isnan(mutant_sprint_dur_on[bin_i])]
+        mutant_sprint_dur_on[bin_i] = mutant_sprint_dur_on[bin_i][np.nonzero(mutant_sprint_dur_on[bin_i])]
+        mutant_sprint_dur_on[bin_i] = list(mutant_sprint_dur_on[bin_i])
+    else:
+        mutant_sprint_dur_off[bin_i] = np.array(mutant_sprint_dur_off[bin_i])
+        mutant_sprint_dur_off[bin_i] = mutant_sprint_dur_off[bin_i][~np.isnan(mutant_sprint_dur_off[bin_i])]
+        mutant_sprint_dur_off[bin_i] = mutant_sprint_dur_off[bin_i][np.nonzero(mutant_sprint_dur_off[bin_i])]
+        mutant_sprint_dur_off[bin_i] = list(mutant_sprint_dur_off[bin_i])
 
-    wildtype_sprint_dur[bin_i] = np.array(wildtype_sprint_dur[bin_i])
-    wildtype_sprint_dur[bin_i] = wildtype_sprint_dur[bin_i][~np.isnan(wildtype_sprint_dur[bin_i])]
-    wildtype_sprint_dur[bin_i] = wildtype_sprint_dur[bin_i][np.nonzero(wildtype_sprint_dur[bin_i])]
-    wildtype_sprint_dur[bin_i] = list(wildtype_sprint_dur[bin_i])
+    if bini < 6:
+        wildtype_sprint_dur_on[bin_i] = np.array(wildtype_sprint_dur_on[bin_i])
+        wildtype_sprint_dur_on[bin_i] = wildtype_sprint_dur_on[bin_i][~np.isnan(wildtype_sprint_dur_on[bin_i])]
+        wildtype_sprint_dur_on[bin_i] = wildtype_sprint_dur_on[bin_i][np.nonzero(wildtype_sprint_dur_on[bin_i])]
+        wildtype_sprint_dur_on[bin_i] = list(wildtype_sprint_dur_on[bin_i])
+    else:
+        wildtype_sprint_dur_off[bin_i] = np.array(wildtype_sprint_dur_off[bin_i])
+        wildtype_sprint_dur_off[bin_i] = wildtype_sprint_dur_off[bin_i][~np.isnan(wildtype_sprint_dur_off[bin_i])]
+        wildtype_sprint_dur_off[bin_i] = wildtype_sprint_dur_off[bin_i][np.nonzero(wildtype_sprint_dur_off[bin_i])]
+        wildtype_sprint_dur_off[bin_i] = list(wildtype_sprint_dur_off[bin_i])
 
-    _, p_value = stats.ttest_ind(np.nan_to_num(mutant_sprint_dur[bin_i]), np.nan_to_num(wildtype_sprint_dur[bin_i]))
-    p_value_one_tailed = p_value / 2
-    print(f"{p_value_one_tailed:.5f}\t{bool(p_value_one_tailed < 0.05)}")
-    # _, p_value = stats.mannwhitneyu(np.nan_to_num(mutant_sprint_dur[bin_i]), np.nan_to_num(wildtype_sprint_dur[bin_i]))
-    # print(f"{p_value:.5f}\t{bool(p_value < 0.05)}")
-    mt_avg[bin_i] = np.mean(np.nan_to_num(mutant_sprint_dur[bin_i]))
-    wt_avg[bin_i] = np.mean(np.nan_to_num(wildtype_sprint_dur[bin_i]))
+    # _, p_value = stats.ttest_ind(np.nan_to_num(mutant_sprint_dur[bin_i]), np.nan_to_num(wildtype_sprint_dur[bin_i]))
+    # p_value_one_tailed = p_value / 2
+    # print(f"{p_value_one_tailed:.5f}\t{bool(p_value_one_tailed < 0.05)}")
+    # # _, p_value = stats.mannwhitneyu(np.nan_to_num(mutant_sprint_dur[bin_i]), np.nan_to_num(wildtype_sprint_dur[bin_i]))
+    # # print(f"{p_value:.5f}\t{bool(p_value < 0.05)}")
+    if bini < 6:
+        mt_avg[bin_i] = np.mean(np.nan_to_num(mutant_sprint_dur_on[bin_i]))
+        wt_avg[bin_i] = np.mean(np.nan_to_num(wildtype_sprint_dur_on[bin_i]))
+    else:
+        mt_avg[bin_i] = np.mean(np.nan_to_num(mutant_sprint_dur_off[bin_i]))
+        wt_avg[bin_i] = np.mean(np.nan_to_num(wildtype_sprint_dur_off[bin_i]))
+
+mt_on, mt_off = split_event_list(sum([mutant_sprint_dur_on[:6],mutant_sprint_dur_off[6:]],[]))
+wt_on, wt_off = split_event_list(sum([wildtype_sprint_dur_on[:6],wildtype_sprint_dur_off[6:]],[]))
+
+
+print(len(mt_on), len(wt_on))
+print(len(mt_off), len(wt_off))
+# print(mutant_sprint_dur_off)
+# print(wildtype_sprint_dur_off)
+
+print(np.var(mt_on, ddof=1)/np.var(wt_on, ddof=1))
+print(np.var(wt_off, ddof=1)/np.var(mt_off, ddof=1))
+
+print(f"Parametric (Normal distribution)")
+print(f"p-value\tSignificant")
+
+_, p_value = stats.ttest_ind(mt_on, wt_on,equal_var=False)
+# _, p_value = stats.mannwhitneyu(mt_on, wt_on)
+print(f"{p_value:.6f}\t{bool(p_value < 0.05)}")
+_, p_value = stats.ttest_ind(mt_off, wt_off,equal_var=False)
+# _, p_value = stats.mannwhitneyu(mt_off, wt_off)
+print(f"{p_value:.6f}\t{bool(p_value < 0.05)}")
+
+stat, p_value = stats.bartlett(mt_off, wt_off)
+print(p_value)
+
+quit()
 
 plt.plot((bin_stop_time - ACC_TIME_MS/2)/1000,mt_avg, color=COLORS[0])
 plt.plot((bin_stop_time - ACC_TIME_MS/2)/1000,wt_avg, color=COLORS[1])
@@ -129,7 +198,7 @@ wildtype1 = Line2D([0], [0], color='r')
 wildtype2 = Line2D([0], [0], marker=".", linestyle="none", color='r', alpha=0.2)
 black = Line2D([0], [0], color='k')
 plt.title("Mean sprint duration for each fish with accumulation time ~30s")
-plt.legend([(mutant1,mutant2), (wildtype1,wildtype2), black] ,["adgrl3.1","WT","Light off"])
+plt.legend([(mutant1,mutant2), (wildtype1,wildtype2), black] ,["$\it{adgrl3.1}$ mutants","WT","Light off"],loc='upper right')
 plt.xlim([0,357])
 plt.ylabel("Mean sprint duration [µs]")
 plt.xlabel("Time [s]")
@@ -143,8 +212,6 @@ plt.show()
 
 fig.savefig(f"graphics/graphs/plot-sprint-duration-all-fish.png")
 
-
-
 mutant_on  = sum(mutant_sprint_dur[:6], [])
 mutant_off = sum(mutant_sprint_dur[6:], [])
 
@@ -152,40 +219,58 @@ wildtype_on  = sum(wildtype_sprint_dur[:6], [])
 wildtype_off = sum(wildtype_sprint_dur[6:], [])
 
 
-fig1 = plt.figure(figsize=(10, 8))
-
-plt.subplot(1, 2, 1)
-stats.probplot(mutant_on, dist="norm", plot=plt)
+fig1 = plt.figure(figsize=(5, 4))
+plt.rcParams['font.size'] = 16
+plt.grid(axis="y")
+stats.probplot(np.array(mutant_on)/1000, dist="norm", plot=plt)
+plt.ylabel("Ordered Values [thousands]      ")
 plt.gca().get_lines()[0].set_color('blue')
 plt.gca().get_lines()[1].set_color('k')
-plt.title(f"Mean sprint duration Q-Q Plot for ADGRL3.1 (Lights on)")
-
-plt.subplot(1, 2, 2)
-stats.probplot(wildtype_on, dist="norm", plot=plt)
-plt.gca().get_lines()[0].set_color('red')
-plt.gca().get_lines()[1].set_color('k')
-plt.title(f"Mean sprint duration Q-Q Plot for WT (Lights on)")
-fig1.savefig(f"graphics/graphs/qqplots/sd_qq_on.png")
-
+plt.title("SD Q-Q $\it{adgrl3.1}$ on")
+plt.legend(["$\it{adgrl3.1}$ mutants"],loc='upper left')
 plt.tight_layout()
+fig1.savefig(f"graphics/graphs/qqplots/sd_qq_on_mt.png")
 plt.show()
 
-
-
-fig2 = plt.figure(figsize=(10, 8))
-
-plt.subplot(1, 2, 1)
-stats.probplot(mutant_off, dist="norm", plot=plt)
-plt.gca().get_lines()[0].set_color('blue')
-plt.gca().get_lines()[1].set_color('k')
-plt.title(f"Mean sprint duration Q-Q Plot for ADGRL3.1 (Lights off)")
-
-plt.subplot(1, 2, 2)
-stats.probplot(wildtype_off, dist="norm", plot=plt)
+fig2 = plt.figure(figsize=(5, 4))
+plt.rcParams['font.size'] = 16
+plt.grid(axis="y")
+stats.probplot(np.array(wildtype_on)/1000, dist="norm", plot=plt)
+plt.ylabel("Ordered Values [thousands]      ")
 plt.gca().get_lines()[0].set_color('red')
 plt.gca().get_lines()[1].set_color('k')
-plt.title(f"Mean sprint duration Q-Q Plot for WT (Lights off)")
-fig2.savefig(f"graphics/graphs/qqplots/sd_qq_off.png")
-
+plt.title("SD Q-Q wildtype on")
+plt.legend(["wildtype"],loc='upper left')
 plt.tight_layout()
+fig2.savefig(f"graphics/graphs/qqplots/sd_qq_on_wt.png")
+plt.show()
+
+fig3 = plt.figure(figsize=(5, 4))
+ax = plt.axes()
+ax.set_facecolor('#e6e6e6')
+plt.rcParams['font.size'] = 16
+plt.grid(axis="y")
+stats.probplot(np.array(mutant_off)/1000, dist="norm", plot=plt)
+plt.ylabel("Ordered Values [thousands]      ")
+plt.gca().get_lines()[0].set_color('blue')
+plt.gca().get_lines()[1].set_color('k')
+plt.title("SD Q-Q $\it{adgrl3.1}$ off")
+plt.legend(["$\it{adgrl3.1}$ mutants"],loc='upper left')
+plt.tight_layout()
+fig3.savefig(f"graphics/graphs/qqplots/sd_qq_off_mt.png")
+plt.show()
+
+fig4 = plt.figure(figsize=(5, 4))
+ax = plt.axes()
+ax.set_facecolor('#e6e6e6')
+plt.rcParams['font.size'] = 16
+plt.grid(axis="y")
+stats.probplot(np.array(wildtype_off)/1000, dist="norm", plot=plt)
+plt.ylabel("Ordered Values [thousands]      ")
+plt.gca().get_lines()[0].set_color('red')
+plt.gca().get_lines()[1].set_color('k')
+plt.title("SD Q-Q wildtype off")
+plt.legend(["wildtype"],loc='upper left')
+plt.tight_layout()
+fig4.savefig(f"graphics/graphs/qqplots/sd_qq_off_wt.png")
 plt.show()

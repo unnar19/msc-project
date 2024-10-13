@@ -17,6 +17,34 @@ WHOLE_TIME = 357
 SPIKE_TIME = 178
 BIN_COUNT = 12
 
+def split_event_list(all_events_list):
+
+    start = 0
+    stop = 48
+
+    result_on =[]
+    result_off=[]
+
+    for i in range(1,7):
+        result_on.append([a+b+c+d+e+f for a,b,c,d,e,f in zip(all_events_list[0][start:stop],
+                                                    all_events_list[1][start:stop],
+                                                    all_events_list[2][start:stop],
+                                                    all_events_list[3][start:stop],
+                                                    all_events_list[4][start:stop],
+                                                    all_events_list[5][start:stop])])
+
+        result_off.append([a+b+c+d+e+f for a,b,c,d,e,f in zip(all_events_list[6][start:stop],
+                                                        all_events_list[7][start:stop],
+                                                        all_events_list[8][start:stop],
+                                                        all_events_list[9][start:stop],
+                                                        all_events_list[10][start:stop],
+                                                        all_events_list[11][start:stop])])
+        
+        start += 48
+        stop += 48
+        
+    return sum(result_on, []), sum(result_off, [])
+
 ACC_TIME_MS = 1000*WHOLE_TIME/BIN_COUNT
 
 bin_stop_time = np.arange(ACC_TIME_MS, 1000*WHOLE_TIME+ACC_TIME_MS, ACC_TIME_MS)
@@ -111,20 +139,32 @@ for date_i, date in enumerate(DATES):
 mutant_whole_average = mutant_whole_average/6
 wildtype_whole_average = wildtype_whole_average/6
 
+
+mt_on, mt_off = split_event_list(mutant_all_events)
+wt_on, wt_off = split_event_list(wildtype_all_events)
+
 print(f"Non parametric (Not normal distribution)")
 print(f"p-value\tSignificant")
-for bin_i in range(BIN_COUNT):
-    _, p_value = stats.mannwhitneyu(mutant_all_events[bin_i], wildtype_all_events[bin_i])
-    print(f"{p_value:.5f}\t{bool(p_value < 0.05)}")
 
-print(f"Parametric (Normal distribution)")
-print(f"p-value\tSignificant")
-for bin_i in range(BIN_COUNT):
-    _, p_value = stats.ttest_ind(mutant_all_events[bin_i], wildtype_all_events[bin_i])
-    p_value_one_tailed = p_value / 2
-    print(f"{p_value_one_tailed:.5f}\t{bool(p_value_one_tailed < 0.05)}")
+_, p_value = stats.mannwhitneyu(mt_on, wt_on)
+print(f"{p_value:.6f}\t{bool(p_value < 0.05)}")
+_, p_value = stats.mannwhitneyu(mt_off, wt_off)
+print(f"{p_value:.6f}\t{bool(p_value < 0.05)}")
 
+# print(f"Non parametric (Not normal distribution)")
+# print(f"p-value\tSignificant")
+# for bin_i in range(BIN_COUNT):
+#     _, p_value = stats.mannwhitneyu(mutant_all_events[bin_i], wildtype_all_events[bin_i])
+#     print(f"{p_value:.5f}\t{bool(p_value < 0.05)}")
 
+# print(f"Parametric (Normal distribution)")
+# print(f"p-value\tSignificant")
+# for bin_i in range(BIN_COUNT):
+#     _, p_value = stats.ttest_ind(mutant_all_events[bin_i], wildtype_all_events[bin_i])
+#     p_value_one_tailed = p_value / 2
+#     print(f"{p_value_one_tailed:.5f}\t{bool(p_value_one_tailed < 0.05)}")
+
+quit()
 
 plt.plot(time_axis_file_average,mutant_whole_average, color=COLORS[0])
 plt.plot(time_axis_file_average,wildtype_whole_average, color=COLORS[1])

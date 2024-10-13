@@ -59,27 +59,32 @@ def confusion_matrix(counts):
     
 
 def plot_histogram_bins(mutant_on, mutant_off, wildtype_on, wildtype_off,metric,ymax,bins,unit):
-    fig = plt.figure(figsize=(10, 6))
-    bins = np.histogram_bin_edges(mutant_on + mutant_off + wildtype_on + wildtype_off, bins=bins)
-
-    plt.subplot(1, 2, 1)
-    plt.hist(mutant_on, bins=bins, color="blue", alpha=0.5, rwidth=0.85, label="ADGRL3.1")
-    plt.axvline(x=np.mean(mutant_on), color="blue", linestyle="dashed", label="ADGRL3.1 Mean")
-    plt.hist(wildtype_on, bins=bins, color="red", alpha=0.5, rwidth=0.85, label="WT")
-    plt.axvline(x=np.mean(wildtype_on), color="red", linestyle="dashed", label="WT Mean")
-    plt.axvline(x=np.mean(wildtype_on + mutant_on), color="k", label="Mean")
+    fig1 = plt.figure(figsize=(7, 4))
+    bins1 = np.histogram_bin_edges(mutant_on + wildtype_on, bins=bins)
+    plt.hist(mutant_on, bins=bins1, color="blue", alpha=0.5, rwidth=0.85, label="$\it{adgrl3.1}$ mutants")
+    plt.axvline(x=np.mean(mutant_on), color="blue", linestyle="dashed", label="$\it{adgrl3.1}$ mutant average")
+    plt.hist(wildtype_on, bins=bins1, color="red", alpha=0.5, rwidth=0.85, label="wildtype")
+    plt.axvline(x=np.mean(wildtype_on), color="red", linestyle="dashed", label="wildtype average")
+    plt.axvline(x=np.mean(wildtype_on + mutant_on), color="k", label="average")
+    plt.grid(axis="y")
     plt.ylim((0,ymax))
     plt.xlabel(f"{metric} bins [{unit}]")
     plt.ylabel("Count of larvae [#]")
     plt.title(f"{metric} histogram for lights on")
     plt.legend()
 
-    plt.subplot(1, 2, 2)
-    plt.hist(mutant_off, bins=bins, color="blue", alpha=0.5, rwidth=0.85, label="ADGRL3.1")
-    plt.axvline(x=np.mean(mutant_off), color="blue", label="ADGRL3.1 Mean")
-    plt.hist(wildtype_off, bins=bins, color="red", alpha=0.5, rwidth=0.85, label="WT")
-    plt.axvline(x=np.mean(wildtype_off), color="red", linestyle="dashed", label="WT Mean")
-    plt.axvline(x=np.mean(wildtype_off + mutant_off), color="k", label="Mean")
+    plt.tight_layout()
+    fig1.savefig(f"graphics\graphs\histograms\histogram-{'-'.join(metric.lower().split())}-on.png")
+    plt.show()
+
+    fig2 = plt.figure(figsize=(7, 4))
+    bins2 = np.histogram_bin_edges(mutant_off + wildtype_off, bins=bins)
+    plt.hist(mutant_off, bins=bins2, color="blue", alpha=0.5, rwidth=0.85, label="$\it{adgrl3.1}$ mutants")
+    plt.axvline(x=np.mean(mutant_off), color="blue", label="$\it{adgrl3.1}$ mutant average")
+    plt.hist(wildtype_off, bins=bins2, color="red", alpha=0.5, rwidth=0.85, label="wildtype")
+    plt.axvline(x=np.mean(wildtype_off), color="red", linestyle="dashed", label="wildtype average")
+    plt.axvline(x=np.mean(wildtype_off + mutant_off), color="k", label="average")
+    plt.grid(axis="y")
     plt.ylim((0,ymax))
     plt.xlabel(f"{metric} bins [{unit}]")
     plt.ylabel("Count of larvae [#]")
@@ -87,11 +92,11 @@ def plot_histogram_bins(mutant_on, mutant_off, wildtype_on, wildtype_off,metric,
     plt.legend()
 
     plt.tight_layout()
-    # fig.savefig(f"graphics\graphs\histograms\histogram-{'-'.join(metric.lower().split())}.png")
+    fig2.savefig(f"graphics\graphs\histograms\histogram-{'-'.join(metric.lower().split())}-off.png")
     plt.show()
 
 
-TRAIN_RATIO = 0.85
+TRAIN_RATIO = 1
 
 ec_mutant_on = []
 ec_mutant_off = []
@@ -226,6 +231,7 @@ plot_histogram_bins(sc_mutant_on,sc_mutant_off,sc_wildtype_on,sc_wildtype_off,"S
 plot_histogram_bins(sd_mutant_on,sd_mutant_off,sd_wildtype_on,sd_wildtype_off,"Avg. sprint duration",45,50,"s")
 plot_histogram_bins(tm_mutant_on,tm_mutant_off,tm_wildtype_on,tm_wildtype_off,"Time moving",250,50,"s")
 
+quit()
 recording_count = 0
 
 predictions_ec_on = []
